@@ -119,52 +119,13 @@
 
 	<!-- Right Section -->
 	<div class="w-96 p-4">
-		<div class="mb-4">
-			<img src={selectedBookmark.icon} alt="" class="mb-2 h-16 w-16 rounded" />
-			<h2 class="text-xl font-semibold">{selectedBookmark.title}</h2>
-			<p class="text-sm text-gray-500">{selectedBookmark.url}</p>
-		</div>
-
-		<div class="space-y-4">
-			<div>
-				<label for="node" class="mb-1 block text-sm font-medium">Note</label>
-				<input id="node" type="text" value="Hello" class="w-full rounded bg-gray-800 px-3 py-2" />
-			</div>
-
-			<div>
-				<label for="collection" class="mb-1 block text-sm font-medium">Collection</label>
-				<div class="flex items-center rounded bg-gray-800 px-3 py-2">
-					<span class="mr-2 h-3 w-3 rounded-full bg-red-500"></span>
-					<span>react / ui</span>
-					<ChevronDown size={16} class="ml-auto" />
-				</div>
-			</div>
-
-			<div>
-				<label for="tags" class="mb-1 block text-sm font-medium">Tags</label>
-				<div class="flex items-center rounded bg-gray-800 px-3 py-2">
-					<span>#learn</span>
-					<input type="text" placeholder="Add tags..." class="ml-2 flex-1 bg-transparent" />
-				</div>
-			</div>
-
-			<div>
-				<label for="url" class="mb-1 block text-sm font-medium">URL</label>
-				<input
-					type="text"
-					value="https://www.facebook.com"
-					class="w-full rounded bg-gray-800 px-3 py-2"
-				/>
-			</div>
-		</div>
-
 		<div class="mt-4 flex items-center justify-between">
 			<div class="flex space-x-2">
 				<button><Heart size={20} /></button>
 				<button><Bell size={20} /></button>
 			</div>
 			<div class="text-sm text-gray-500">
-				Saved {formatDate(new Date('2024-09-15T22:28:00'))}
+				Saved {formatDate('2024-09-15T22:28:00')}
 			</div>
 		</div>
 

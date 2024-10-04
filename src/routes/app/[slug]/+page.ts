@@ -1,11 +1,11 @@
-import { authenticate } from '$lib/api/auth';
 import { getFolderLinks } from '$lib/api/folder/getFoldersLinks';
 import { currentFolderAtSlug, folders } from '$lib/stores/folder.store';
 import { get } from 'svelte/store';
 import type { LayoutLoad } from '../$types';
 
-export const load: LayoutLoad = async ({ params }) => {
-	await authenticate({ admin: true });
+export const load: LayoutLoad = async ({ params, parent }) => {
+	await parent();
+	console.log('yoooooo');
 	const folderID = params.slug;
 	const linksList = await getFolderLinks(folderID);
 	if (folderID) {

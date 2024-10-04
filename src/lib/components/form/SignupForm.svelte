@@ -7,9 +7,10 @@
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 	import LoadingSpinner from '../shared-components/loading-spinner.svelte';
-	import { setSession, type Session } from '$lib/stores/user.store';
+	import { setSession } from '$lib/stores/user.store';
 	import { signup } from '$lib/api/auth/signup';
 	import { AppRoute } from '$lib/constants';
+	import type { Session } from '$lib/types/session';
 	$: form = superForm(defaults(zod(signupSchema)), {
 		SPA: true,
 		validators: zod(signupSchema),

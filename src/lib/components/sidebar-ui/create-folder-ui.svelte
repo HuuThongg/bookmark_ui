@@ -26,23 +26,19 @@
 	$: ({ form: formData, submitting, enhance } = form);
 </script>
 
-<div class="mx-auto mt-10 max-w-96">
-	<form method="post" use:enhance class="flex w-full justify-between">
-		<Form.Field {form} name="folderName">
+<form method="post" use:enhance class="flex w-full">
+	<div class=" flex w-full items-center px-4">
+		<Form.Field {form} name="folderName" class="relative w-full">
 			<Form.Control let:attrs>
 				<Form.Label class="sr-only">Folder Name</Form.Label>
-				<Input {...attrs} bind:value={$formData.folderName} />
+				<Input {...attrs} bind:value={$formData.folderName} placeholder="Type your collection" />
+				{#if $submitting}
+					<span class="absolute right-2 top-[8px] h-6 w-6">
+						<LoadingSpinner />
+					</span>
+				{/if}
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Button aria-disabled={$submitting}>
-			{#if $submitting}
-				<span class="h-6">
-					<LoadingSpinner />
-				</span>
-			{:else}
-				Add
-			{/if}
-		</Form.Button>
-	</form>
-</div>
+	</div>
+</form>

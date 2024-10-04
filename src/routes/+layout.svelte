@@ -4,4 +4,10 @@
 </script>
 
 <Toaster />
-<slot></slot>
+<div
+	class="relative flex max-h-screen min-h-screen flex-col bg-background"
+	id="page"
+	data-vaul-drawer-wrapper
+>
+	<slot />
+</div>

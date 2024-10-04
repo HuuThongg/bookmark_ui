@@ -31,7 +31,14 @@
 		folderInfo.folder_name = (event.target as HTMLInputElement).value; // Update folder o
 		console.log('hello', folderInfo.folder_name);
 	}
-	function handleSubmit(e, f) {}
+	function handleSubmit(
+		e: SubmitEvent & {
+			currentTarget: EventTarget & HTMLFormElement;
+		},
+		f: Folder
+	) {
+		console.log('handleSubmit');
+	}
 </script>
 
 {#each treeItems as { children, folderInfo }, i}
@@ -54,11 +61,15 @@
 				class="flex items-center gap-1 rounded-md p-1 focus:bg-magnum-200"
 				use:melt={$item({ id: itemId, hasChildren })}
 				aria-expanded={$isExpanded(itemId)}
-				on:m-click={async (event) => {
-					await goto(`/app/${itemId}`);
+				on:m-click={async () => {
+					console.log('srat onclick');
+					await goto(`/app/${itemId}`, { keepFocus: true });
+					console.log('end onclick');
 				}}
-				on:m-keydown={async (event) => {
-					await goto(`/app/${itemId}`);
+				on:m-keydown={async () => {
+					console.log('start keydown');
+					await goto(`/app/${itemId}`, { keepFocus: true });
+					console.log('/end keydown');
 				}}
 			>
 				<!-- Toggle icon -->

@@ -9,8 +9,9 @@
 	import { onMount } from 'svelte';
 	import LoadingSpinner from '../shared-components/loading-spinner.svelte';
 	import { login } from '$lib/api/auth/login';
-	import { setSession, type Session } from '$lib/stores/user.store';
+	import { setSession } from '$lib/stores/user.store';
 	import { AppRoute } from '$lib/constants';
+	import type { Session } from '$lib/types/session';
 	onMount(async () => {
 		//if (oauth.isCallback(window.location)) {
 		//     try {
@@ -34,7 +35,7 @@
 					const session: Session = await login(form.data);
 					setSession(session); // Update the session store
 					toast.success('Welcome Back');
-					goto(AppRoute.APP); // Redirect to the homepage
+					await goto(AppRoute.APP); // Redirect to the homepage
 
 					//const user = await login({ loginCredentialDto: { email, password } });
 					//

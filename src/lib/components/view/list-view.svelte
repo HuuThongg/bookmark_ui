@@ -23,7 +23,7 @@
 		{ label: 'Tags', checked: true }
 	];
 
-	function toggleItem(index) {
+	function toggleItem(index: number) {
 		showInList[index].checked = !showInList[index].checked;
 		console.log(
 			`${showInList[index].label} is now ${showInList[index].checked ? 'checked' : 'unchecked'}`

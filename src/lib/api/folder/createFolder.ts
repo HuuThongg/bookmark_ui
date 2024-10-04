@@ -54,10 +54,7 @@ export async function CreateFolder(folder_name: string, parent_folder_id?: strin
 		} else {
 			folders.set([...myFolders, folder]);
 		}
-
 		lastCreatedFolder.set(folder);
-
-		folderName.set('Untitled collection');
 	} catch (error) {
 		console.error(error);
 		throw new Error('Error  creating folder');

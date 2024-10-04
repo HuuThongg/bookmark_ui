@@ -12,6 +12,7 @@ import { redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 import { AppRoute } from '$lib/constants';
 import { RefreshToken } from '../token/refreshToken';
+import { fade } from 'svelte/transition';
 
 export interface AuthOptions {
 	admin?: true;
@@ -23,11 +24,11 @@ export const loadUser = async () => {
 		let user = get(user$);
 		let preferences = get(preferences$);
 
-		if (!user && hasAuthCookie()) {
-			const user = await getMyUser();
-			user$.set(user);
-			//preferences$.set(preferences);
-		}
+		//if (!user && hasAuthCookie()) {
+		//	const user = await getMyUser();
+		//	user$.set(user);
+		//	//preferences$.set(preferences);
+		//}
 		return user;
 	} catch {
 		return null;
@@ -51,25 +52,37 @@ const hasAuthCookie = (): boolean => {
 export const authenticate = async (options?: AuthOptions) => {
 	const { public: publicRoute, admin: adminRoute } = options || {};
 	const user = await loadUser();
-
+	console.log('authenticate');
 	if (publicRoute) {
 		return;
 	}
-	console.log('user', user);
 
+	console.log('au');
 	if (!user) {
+		console.log('user');
 		redirect(302, AppRoute.ACCOUNT_LOGIN);
 	}
+	console.log('dsadsa');
 	const access_token = getSession().access_token;
-	if (!access_token) return;
-	console.log('access_token', access_token);
-	await checkIfIsAuthenticated(access_token);
-	if (adminRoute && user) {
-		//redirect(302, AppRoute.APP);
+
+	if (!access_token) {
+		redirect(302, AppRoute.ACCOUNT_LOGIN);
 	}
+	console.log('pass access_token');
+	const isLoggin = await checkIfIsAuthenticated(access_token);
+	console.log('isLoggin', isLoggin);
+	if (!isLoggin) {
+		redirect(302, AppRoute.ACCOUNT_LOGIN);
+	}
+
+	console.log('hello');
+	//if (adminRoute && user) {
+	//  console.log("das")
+	//  redirect(302, AppRoute.APP);
+	//}
 };
 
-async function checkIfIsAuthenticated(access_token: string) {
+export async function checkIfIsAuthenticated(access_token: string): Promise<boolean> {
 	const response = await fetch(`${PUBLIC_API_ENDPOINT}/public/checkIfIsAuthenticated`, {
 		method: 'POST',
 		mode: 'cors',
@@ -87,12 +100,13 @@ async function checkIfIsAuthenticated(access_token: string) {
 		}) // body data type must match "Content-Type" header
 	});
 	const result = await response.json();
-	console.log('result', result);
+	console.log('checkIfIsAuthenticated result', result);
 	if (result.message !== 'user logged in') {
 		await RefreshToken(getSession());
 
-		return;
+		//return false;
 	}
+	return true;
 }
 
 export const handleLogout = async (redirectUri: string) => {
