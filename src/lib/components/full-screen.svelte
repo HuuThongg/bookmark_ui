@@ -124,7 +124,7 @@
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
 		<!-- <slot /> -->
-		<Resizable.Pane defaultSize={defaultLayout[1]} minSize={10}>
+		<Resizable.Pane defaultSize={defaultLayout[1]} minSize={15}>
 			<slot />
 		</Resizable.Pane>
 	</Resizable.PaneGroup>

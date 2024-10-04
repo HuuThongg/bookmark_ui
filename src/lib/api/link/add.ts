@@ -12,8 +12,7 @@ const myLinks: Link[] = [];
 
 export async function addLink(url: string, folderID: string): Promise<Link | undefined> {
   const s = getSession();
-  const accountID = s.account?.id;
-  if (!accountID) return;
+  if (!s) return
 
   const response = await fetch(`${PUBLIC_API_ENDPOINT}/private/link/add`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.

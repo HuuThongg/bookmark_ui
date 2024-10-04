@@ -28,7 +28,7 @@ export async function getLinksAndFolders(folder_id: string) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      authorization: `Bearer${get(session).access_token}`
+      authorization: `Bearer${s.access_token}`
     }
   });
 
