@@ -1,7 +1,12 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import FullScreen from '$lib/components/full-screen.svelte';
 	import { Bell, ChevronDown, Heart } from 'lucide-svelte';
-
+	import { onMount } from 'svelte';
+	onMount(() => {
+		// Call invalidate to refresh the parent page's data
+		invalidate(`/app/mtjfcbvknaqbsw--z-wrcv-fxmeciohlo`);
+	});
 	let bookmarks = [
 		{
 			title: 'Raindrop.io — All in One Bookmark Manager',

@@ -9,13 +9,14 @@
 	import LoadingSpinner from '$lib/components/shared-components/loading-spinner.svelte';
 	import { links } from '$lib/stores/link.store';
 	import { onDestroy } from 'svelte';
-	import FilterHeader from '$lib/components/main-page/filter-header.svelte';
 	import type { Link } from '$lib/types/link';
 	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
 	let linkList: Link[] = [];
 	$: linkList = $links;
 	let loadingStates: LoadingStates = {};
+	console.log('linklist', linkList);
+	const a = links.subscribe((v) => console.log('v: ', v));
 
 	const unsubscribe = loadingStatesStore.subscribe((value) => {
 		loadingStates = value;
@@ -23,6 +24,7 @@
 
 	onDestroy(() => {
 		unsubscribe(); // Clean up subscription
+		a();
 	});
 	const currPathname = $page.url.pathname.split('/').at(2);
 

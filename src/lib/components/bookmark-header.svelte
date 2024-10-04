@@ -24,9 +24,10 @@
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
 				try {
-					await addLink(form.data.url, folerID_Name.folder_id);
+					const link = await addLink(form.data.url, folerID_Name.folder_id);
 					toast.success(`Added ${form.data.url}`);
-					await goto(`${window.location.pathname}/item/edit`);
+					if (!link) return;
+					await goto(`/app/${$currentFolderAtSlug.folder_id}/item/${link.link_id}/edit`);
 				} catch (error) {
 					toast.error('Error: adding a link');
 				}
@@ -75,17 +76,28 @@
 				<Form.Field {form} name="url">
 					<Form.Control let:attrs>
 						<Form.Label>URL</Form.Label>
-						<Input {...attrs} bind:value={$formData.url} />
+						<Input
+							{...attrs}
+							bind:value={$formData.url}
+							placeholder="/example.com"
+							on:keydown={(e) => {
+								if (e.key === 'Enter') {
+									e.preventDefault(); // Prevent default Enter behavior
+									if ($formData.url) {
+										form.submit();
+									}
+								}
+							}}
+						/>
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Button aria-disabled={$submitting}>
+					Add to {$currentFolderAtSlug.folder_name}
 					{#if $submitting}
-						<span class="h-6">
+						<span class="ml-2 h-6">
 							<LoadingSpinner />
 						</span>
-					{:else}
-						Add to {$currentFolderAtSlug.folder_name}
 					{/if}
 				</Form.Button>
 			</form>

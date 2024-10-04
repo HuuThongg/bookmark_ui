@@ -68,7 +68,7 @@
 				}}
 				on:m-keydown={async () => {
 					console.log('start keydown');
-					await goto(`/app/${itemId}`, { keepFocus: true });
+					//await goto(`/app/${itemId}`, { keepFocus: true });
 					console.log('/end keydown');
 				}}
 			>

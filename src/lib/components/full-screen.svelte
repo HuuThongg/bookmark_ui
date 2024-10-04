@@ -55,8 +55,8 @@
 			defaultSize={defaultLayout[0]}
 			collapsedSize={navCollapsedSize}
 			collapsible
-			minSize={12}
-			maxSize={30}
+			minSize={10}
+			maxSize={14}
 			{onCollapse}
 			{onExpand}
 			style="width: {isCollapsed ? '0' : ''}; flex-grow: {isCollapsed && 0};"
