@@ -2,7 +2,6 @@
 	import { ArrowLeft, Folder, FolderOpen } from 'lucide-svelte';
 	import JS from './icons/JS.svelte';
 	import Svelte from './icons/Svelte.svelte';
-	//type Icon = 'svelte' | 'folder' | 'js';
 	export interface TreeItem {
 		children: TreeItem[];
 		folderInfo: Folder;
@@ -18,11 +17,22 @@
 
 <script lang="ts">
 	import { melt, type TreeView } from '@melt-ui/svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { cn } from '$lib/utils';
+	import CreateFolderUi from '../sidebar-ui/create-folder-ui.svelte';
+	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
+	import { isOpenCreatedFolderComponent } from '$lib/stores';
+	import { page } from '$app/stores';
 	export let treeItems: TreeItem[];
 	export let level = 1;
 	export let isEditing: { [key: string]: boolean } = {}; // Track which folder is being edited
+	function changeSelectedFolderId(folderId: string) {
+		console.log('folder_id', folderId);
+		if (!($sidebarSelectedFolderId === folderId)) {
+			sidebarSelectedFolderId.set(folderId);
+		}
+	}
 	const {
 		elements: { item, group },
 		helpers: { isExpanded, isSelected }
@@ -39,6 +49,12 @@
 	) {
 		console.log('handleSubmit');
 	}
+	onMount(() => {
+		const folder_id = $page.url.pathname.split('/').at(2);
+		if (folder_id) {
+			sidebarSelectedFolderId.set(folder_id);
+		}
+	});
 </script>
 
 {#each treeItems as { children, folderInfo }, i}
@@ -58,16 +74,23 @@
 			</form>
 		{:else}
 			<button
-				class="flex items-center gap-1 rounded-md p-1 focus:bg-magnum-200"
+				class={cn(
+					'flex w-full items-center gap-1 rounded-none p-1 px-4 focus:bg-neutral-700',
+					$isSelected(itemId) ||
+						($sidebarSelectedFolderId === folderInfo.folder_id && 'bg-neutral-700')
+				)}
 				use:melt={$item({ id: itemId, hasChildren })}
 				aria-expanded={$isExpanded(itemId)}
 				on:m-click={async () => {
 					console.log('srat onclick');
+					changeSelectedFolderId(folderInfo.folder_id);
+					isOpenCreatedFolderComponent.set(false);
 					await goto(`/app/${itemId}`, { keepFocus: true });
 					console.log('end onclick');
 				}}
 				on:m-keydown={async () => {
 					console.log('start keydown');
+					changeSelectedFolderId(folderInfo.folder_id);
 					//await goto(`/app/${itemId}`, { keepFocus: true });
 					console.log('/end keydown');
 				}}
@@ -76,7 +99,7 @@
 				<!-- {#if hasChildren && $isExpanded(itemId)} -->
 				<svelte:component this={icons['folderOpen']} class="h-4 w-4" />
 
-				<span class="select-none">{folderInfo.folder_name}</span>
+				<span class="select-none pl-1">{folderInfo.folder_name}</span>
 
 				<!-- Selected icon -->
 				{#if $isSelected(itemId)}
@@ -85,7 +108,9 @@
 				{/if}
 			</button>
 		{/if}
-
+		{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === itemId}
+			<CreateFolderUi />
+		{/if}
 		{#if children}
 			<ul use:melt={$group({ id: itemId })}>
 				<svelte:self treeItems={children} level={level + 1} />

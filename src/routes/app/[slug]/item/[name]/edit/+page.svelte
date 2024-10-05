@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
+	import EditPage from '$lib/components/edit.web-page/edit-page.svelte';
 	import FullScreen from '$lib/components/full-screen.svelte';
-	import { Bell, ChevronDown, Heart } from 'lucide-svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Bell, ChevronDown, ExternalLink, Heart, Maximize2, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	onMount(() => {
-		// Call invalidate to refresh the parent page's data
-		invalidate(`/app/mtjfcbvknaqbsw--z-wrcv-fxmeciohlo`);
-	});
+
 	let bookmarks = [
 		{
 			title: 'Raindrop.io — All in One Bookmark Manager',
@@ -60,54 +59,36 @@
 	}
 </script>
 
-<div class="flex w-full">
-	<div class="mb-4">
-		<img src={selectedBookmark.icon} alt="" class="mb-2 h-16 w-16 rounded" />
-		<h2 class="text-xl font-semibold">{selectedBookmark.title}</h2>
-		<p class="text-sm text-gray-500">{selectedBookmark.url}</p>
+<aside class="flex w-full min-w-0 flex-1 flex-col overflow-hidden bg-neutral-900">
+	<div
+		class="sticky top-0 z-[4] flex flex-shrink-0 justify-between whitespace-nowrap px-4 py-2 shadow-xl backdrop-blur-md"
+	>
+		<div>
+			<Button variant="ghost" size="sm" class="rounded-lg">
+				<span class="sr-only">close</span>
+				<X class="h-5 w-5" />
+			</Button>
+			<Button variant="ghost" size="sm" class="rounded-lg">
+				<span class="sr-only">FullScreen</span>
+				<Maximize2 class="h-5 w-5" />
+			</Button>
+		</div>
+		<div>
+			<Button variant="ghost" size="sm" class="rounded-lg">
+				<span>Edit</span>
+			</Button>
+		</div>
+		<Button variant="ghost" size="sm" class="justify-self-end rounded-lg">
+			<span class="sr-only">ExternalLink</span>
+			<ExternalLink class="size-5" />
+		</Button>
 	</div>
-
-	<div class="space-y-4">
-		<div>
-			<label for="node" class="mb-1 block text-sm font-medium">Note</label>
-			<input id="node" type="text" value="Hello" class="w-full rounded bg-gray-800 px-3 py-2" />
+	<div id="content" class="h-full w-full overflow-x-hidden overflow-y-scroll">
+		<div class="mx-auto my-0 flex w-full max-w-md">
+			<form action="" class="relative w-full flex-1">
+				<div class="grid grid-rows-[auto_1fr] items-center gap-2 p-4"></div>
+				<EditPage />
+			</form>
 		</div>
-
-		<div>
-			<label for="collection" class="mb-1 block text-sm font-medium">Collection</label>
-			<div class="flex items-center rounded bg-gray-800 px-3 py-2">
-				<span class="mr-2 h-3 w-3 rounded-full bg-red-500"></span>
-				<span>react / ui</span>
-				<ChevronDown size={16} class="ml-auto" />
-			</div>
-		</div>
-
-		<div>
-			<label for="tags" class="mb-1 block text-sm font-medium">Tags</label>
-			<div class="flex items-center rounded bg-gray-800 px-3 py-2">
-				<span>#learn</span>
-				<input type="text" placeholder="Add tags..." class="ml-2 flex-1 bg-transparent" />
-			</div>
-		</div>
-
-		<div>
-			<label for="url" class="mb-1 block text-sm font-medium">URL</label>
-			<input
-				type="text"
-				value="https://www.facebook.com"
-				class="w-full rounded bg-gray-800 px-3 py-2"
-			/>
-		</div>
-		<div class="mt-4 flex items-center justify-between">
-			<div class="flex space-x-2">
-				<button><Heart size={20} /></button>
-				<button><Bell size={20} /></button>
-			</div>
-			<div class="text-sm text-gray-500">Saved</div>
-		</div>
-
-		<button class="mt-4 w-full rounded bg-gray-800 py-2 text-gray-300 hover:bg-gray-700">
-			Delete
-		</button>
 	</div>
-</div>
+</aside>

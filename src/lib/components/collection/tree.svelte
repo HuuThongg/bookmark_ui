@@ -25,6 +25,7 @@
 	import { getContext, onMount } from 'svelte';
 	import type { MeltEventHandler } from '@melt-ui/svelte/internal/types';
 	import { goto } from '$app/navigation';
+	import CreateFolderUi from '../sidebar-ui/create-folder-ui.svelte';
 
 	export let treeItems: TreeItem[];
 	export let level = 1;
@@ -72,6 +73,9 @@
 				<svelte:component this={icons['highlight']} class="h-4 w-4" />
 			{/if}
 		</button>
+		<div>
+			<CreateFolderUi />
+		</div>
 
 		{#if children}
 			<ul use:melt={$group({ id: itemId })}>

@@ -2,17 +2,17 @@ import type { Session } from '$lib/types/session';
 import type { User } from '$lib/types/user';
 import { persisted } from 'svelte-local-storage-store';
 import { get, writable } from 'svelte/store';
-import * as devalue from 'devalue'
+import * as devalue from 'devalue';
 // Default User value
 const defaultUser: User = {
-  id: 0,
-  fullname: '',
-  email: '',
-  email_verified: false,
-  picture: '',
-  create_at: new Date(0).toISOString(),
-  intention: '',
-  last_login: new Date(0).toISOString()
+	id: 0,
+	fullname: '',
+	email: '',
+	email_verified: false,
+	picture: '',
+	create_at: new Date(0).toISOString(),
+	intention: '',
+	last_login: new Date(0).toISOString()
 };
 
 // Default session value
@@ -26,36 +26,40 @@ const defaultUser: User = {
 // Create a writable store with the default session value
 
 export const session = persisted<Session | undefined>('session', undefined, {
-  serializer: {
-    parse: (text: string): Session | undefined => {
-      try {
-        const parsedSession: Session = JSON.parse(text);
-        // You can add checks here to validate the parsed session if needed
-        return parsedSession ? parsedSession : undefined; // Return undefined if the account is not valid
-      } catch (error) {
-        console.error("Failed to parse session:", error);
-        return undefined;
-      }
-    },
+	serializer: {
+		parse: (text: string): Session | undefined => {
+			try {
+				// Handle case where the string is 'undefined' or an empty string
+				if (!text || text === 'undefined') {
+					return undefined;
+				}
 
-    stringify: (object) => JSON.stringify(object),
+				const parsedSession: Session = JSON.parse(text);
 
-  },
+				// Optionally validate parsedSession here
+				return parsedSession || undefined; // Return undefined if parsing fails
+			} catch (error) {
+				console.error('Failed to parse session:', error);
+				return undefined;
+			}
+		},
+
+		stringify: (object) => JSON.stringify(object)
+	}
 });
-
 
 // Function to update session
 export const setSession = (s: Session) => {
-  session.set(s);
-  user.set(s.account);
+	session.set(s);
+	user.set(s.account);
 };
 export const getSession = () => {
-  return get(session);
+	return get(session);
 };
 
 // Function to clear session
 export const clearSession = () => {
-  session.set(undefined);
+	session.set(undefined);
 };
 
 export const user = persisted<User | undefined>('user', undefined, { storage: 'local' });
@@ -66,7 +70,7 @@ export const preferences = writable();
  * only do this _after_ redirecting to an unauthenticated page.
  */
 export const resetSavedUser = () => {
-  user.set(undefined as unknown as User);
-  preferences.set(undefined);
-  clearSession()
+	user.set(undefined as unknown as User);
+	preferences.set(undefined);
+	clearSession();
 };

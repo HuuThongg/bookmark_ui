@@ -11,6 +11,19 @@
 	import { signup } from '$lib/api/auth/signup';
 	import { AppRoute } from '$lib/constants';
 	import type { Session } from '$lib/types/session';
+	import Button from '../ui/button/button.svelte';
+	import { inputClass } from '$lib/utils';
+	import { onMount, tick } from 'svelte';
+	let inputElement: HTMLInputElement | null;
+	onMount(async () => {
+		await tick();
+		await focusInput();
+	});
+	async function focusInput() {
+		if (inputElement) {
+			inputElement.focus();
+		}
+	}
 	$: form = superForm(defaults(zod(signupSchema)), {
 		SPA: true,
 		validators: zod(signupSchema),
@@ -36,7 +49,12 @@
 		<Form.Field {form} name="username">
 			<Form.Control let:attrs>
 				<Form.Label>Username</Form.Label>
-				<Input {...attrs} bind:value={$formData.username} />
+				<input
+					class={inputClass}
+					{...attrs}
+					bind:value={$formData.username}
+					bind:this={inputElement}
+				/>
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
@@ -50,18 +68,24 @@
 		<Form.Field {form} name="password">
 			<Form.Control let:attrs>
 				<Form.Label>Password</Form.Label>
-				<Input {...attrs} bind:value={$formData.password} />
+				<Input type="password" {...attrs} bind:value={$formData.password} />
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Button aria-disabled={$submitting}>
+		<Form.Button class="mt-3 w-full" aria-disabled={$submitting}>
 			{#if $submitting}
 				<span class="h-6">
 					<LoadingSpinner />
 				</span>
 			{:else}
-				SignUp
+				Sign up
 			{/if}
 		</Form.Button>
+
+		<Button
+			variant="link"
+			class="mt-2 flex h-auto justify-center p-2 text-center capitalize "
+			href="/account/login">Sign in</Button
+		>
 	</form>
 </div>

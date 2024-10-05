@@ -1,8 +1,9 @@
 <script lang="ts">
+	import AccountWrapper from '$lib/components/account/account-wrapper.svelte';
 	import LoginForm from '$lib/components/form/loginForm.svelte';
 </script>
 
-<div class="w-ful mt-20 flex justify-center">
-	<a href="/account/signup">Signup</a>
-</div>
-<LoginForm />
+<AccountWrapper>
+	<span slot="title">Login</span>
+	<LoginForm />
+</AccountWrapper>

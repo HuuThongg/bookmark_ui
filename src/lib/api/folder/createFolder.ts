@@ -8,7 +8,7 @@ let myFolders: Folder[] = [];
 
 let folderID: string = '';
 
-export async function CreateFolder(folder_name: string, parent_folder_id?: string) {
+export async function CreateFolder(folder_name: string, parent_folder_id?: string | null) {
 	if (!parent_folder_id) {
 		folderID = 'null';
 	} else {

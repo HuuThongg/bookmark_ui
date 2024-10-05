@@ -1,1 +1,1 @@
-export type Fetch = typeof window.fetch
+export type Fetch = typeof window.fetch;

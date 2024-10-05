@@ -6,6 +6,7 @@ export const folderName = writable<string>('Untitled collection');
 export const newLink = writable<string>('');
 
 export const selectedFolders = writable<Folder[]>([]);
+export const sidebarSelectedFolderId = writable<string | null>(null);
 
 export const currentFolder = writable<string>('');
 

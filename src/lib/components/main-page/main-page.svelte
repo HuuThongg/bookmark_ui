@@ -15,7 +15,6 @@
 	let linkList: Link[] = [];
 	$: linkList = $links;
 	let loadingStates: LoadingStates = {};
-	console.log('linklist', linkList);
 	const a = links.subscribe((v) => console.log('v: ', v));
 
 	const unsubscribe = loadingStatesStore.subscribe((value) => {
@@ -80,5 +79,10 @@
 				</a>
 			{/each}
 		</div>
+		{#if linkList.length === 0}
+			<div class=" mt-10 flex w-full justify-center">
+				<h3 class="text-xl">Add a link</h3>
+			</div>
+		{/if}
 	</div>
 </div>

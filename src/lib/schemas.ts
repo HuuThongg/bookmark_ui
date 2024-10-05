@@ -3,6 +3,9 @@ import { z } from 'zod';
 export const emailSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
 });
+export const passwordSchema = z.object({
+	password: z.string().min(5, { message: 'Must be 5 or more character long' })
+});
 
 export type EmailSchema = typeof emailSchema;
 export const signupSchema = z.object({

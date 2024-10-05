@@ -38,7 +38,7 @@
 </script>
 
 <div class="flex h-full w-full flex-col">
-	<ul class="overflow-auto px-4 pb-4 pt-2" {...$tree}>
+	<ul class="overflow-auto pb-4 pt-2" {...$tree}>
 		<Tree {treeItems} />
 	</ul>
 </div>

@@ -11,6 +11,8 @@
 	import { AppRoute } from '$lib/constants';
 	import { cn } from '$lib/utils';
 	import { Plus } from 'lucide-svelte';
+	import { isOpenCreatedFolderComponent } from '$lib/stores';
+	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 
 	export let defaultLayout = [65, 240, 655];
 	export let defaultCollapsed = false;
@@ -47,6 +49,10 @@
 		// ... other filters
 	];
 	let showForm = false;
+
+	function toggleCreateFolderUI() {
+		isOpenCreatedFolderComponent.set(!$isOpenCreatedFolderComponent);
+	}
 </script>
 
 <div class=" flex h-screen w-full flex-row overflow-hidden">
@@ -83,18 +89,13 @@
 							>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
-					<Button
-						variant="ghost"
-						size="sm"
-						class="rounded-lg"
-						on:click={() => (showForm = !showForm)}
-					>
+					<Button variant="ghost" size="sm" class="rounded-lg" on:click={toggleCreateFolderUI}>
 						<span class="sr-only">Create a collection</span>
 						<Plus class="h-5 w-5" />
 					</Button>
 				</div>
 				<div>
-					{#if showForm}
+					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
 						<CreateFolderUI />
 					{/if}
 					<div class="mt-2 w-full">
