@@ -21,3 +21,4 @@ export const lastCreatedFolder = writable<Folder>();
 export const loading = writable<boolean>(true);
 
 export const createFolderMode = writable<boolean>(false);
+

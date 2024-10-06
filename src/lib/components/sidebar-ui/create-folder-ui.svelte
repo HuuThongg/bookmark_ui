@@ -33,12 +33,15 @@
 </script>
 
 <form method="post" use:enhance class="flex w-full">
-	<div class=" flex w-full items-center px-4">
+	<div class=" flex w-full items-center px-0">
 		<Form.Field {form} name="folderName" class="relative w-full space-y-0">
 			<Form.Control let:attrs>
 				<Form.Label class="sr-only">Folder Name</Form.Label>
 				<input
-					class={cn('mt-0 h-auto focus-within:ring-0 focus-visible:ring-0', inputClass)}
+					class={cn(
+						'mt-0 h-auto focus-within:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
+						inputClass
+					)}
 					{...attrs}
 					bind:value={$formData.folderName}
 					placeholder="Type your collection"

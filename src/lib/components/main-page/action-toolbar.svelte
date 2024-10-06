@@ -56,7 +56,7 @@
 </script>
 
 {#if $selectedLinksMode}
-	<div class="flex space-x-2 rounded-md bg-gray-800 p-2">
+	<div class="flex space-x-2 rounded-md bg-gray-800">
 		<Dialog bind:open={moveDialogOpen}>
 			<DialogTrigger>
 				<Button variant="ghost" class="text-white">

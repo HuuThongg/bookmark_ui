@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { ArrowLeft, Folder, FolderOpen } from 'lucide-svelte';
+	import { ArrowLeft, FolderIcon, FolderOpen } from 'lucide-svelte';
 	import JS from './icons/JS.svelte';
 	import Svelte from './icons/Svelte.svelte';
 	export interface TreeItem {
@@ -8,7 +8,7 @@
 	}
 	export const icons = {
 		svelte: Svelte,
-		folder: Folder,
+		folder: FolderIcon,
 		folderOpen: FolderOpen,
 		js: JS,
 		highlight: ArrowLeft
@@ -24,9 +24,17 @@
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { page } from '$app/stores';
+	import { initInput } from '$lib/actions/focus';
+	import { renameFolder } from '$lib/api/folder/renameFolder';
+	import type { Folder } from '$lib/types/folder';
 	export let treeItems: TreeItem[];
 	export let level = 1;
 	export let isEditing: { [key: string]: boolean } = {}; // Track which folder is being edited
+	let delay = 200;
+	let timeout: number | undefined = undefined;
+	let waiting = false;
+	let clickType = '';
+	let elementInput: HTMLInputElement | null = null;
 	function changeSelectedFolderId(folderId: string) {
 		console.log('folder_id', folderId);
 		if (!($sidebarSelectedFolderId === folderId)) {
@@ -37,18 +45,14 @@
 		elements: { item, group },
 		helpers: { isExpanded, isSelected }
 	} = getContext<TreeView>('tree');
-	function handleNameChange(event: Event, folderInfo: Folder) {
+	async function handleNameChange(event: Event, folderInfo: Folder) {
 		folderInfo.folder_name = (event.target as HTMLInputElement).value; // Update folder o
-		console.log('hello', folderInfo.folder_name);
 	}
-	function handleSubmit(
-		e: SubmitEvent & {
-			currentTarget: EventTarget & HTMLFormElement;
-		},
-		f: Folder
-	) {
-		console.log('handleSubmit');
+	async function handleSubmit(f: Folder, itemId: string) {
+		await renameFolder(elementInput?.value, f.folder_id);
+		isEditing[itemId] = false;
 	}
+
 	onMount(() => {
 		const folder_id = $page.url.pathname.split('/').at(2);
 		if (folder_id) {
@@ -63,30 +67,45 @@
 
 	<li class={level !== 1 ? 'pl-4' : ''}>
 		{#if isEditing[itemId]}
-			<form on:submit={(event) => handleSubmit(event, folderInfo)} class="flex items-center gap-1">
+			<form
+				on:submit|preventDefault={async () => handleSubmit(folderInfo, itemId)}
+				class="flex items-center gap-x-1 px-4"
+			>
+				<svelte:component this={icons['folderOpen']} class="h-4 w-4 pl-4" />
 				<input
 					type="text"
-					class="select-none"
+					id="folderName"
+					class="w-full select-none focus-visible:bg-neutral-700"
+					bind:this={elementInput}
 					bind:value={folderInfo.folder_name}
 					on:input={(event) => handleNameChange(event, folderInfo)}
+					on:focusout={() => (isEditing[itemId] = false)}
+					use:initInput
 				/>
-				<button type="submit" class="rounded-md p-1">Save</button>
 			</form>
 		{:else}
 			<button
 				class={cn(
 					'flex w-full items-center gap-1 rounded-none p-1 px-4 focus:bg-neutral-700',
-					$isSelected(itemId) ||
-						($sidebarSelectedFolderId === folderInfo.folder_id && 'bg-neutral-700')
+					($isSelected(itemId) || $sidebarSelectedFolderId === folderInfo.folder_id) &&
+						'bg-neutral-700'
 				)}
 				use:melt={$item({ id: itemId, hasChildren })}
 				aria-expanded={$isExpanded(itemId)}
 				on:m-click={async () => {
-					console.log('srat onclick');
-					changeSelectedFolderId(folderInfo.folder_id);
-					isOpenCreatedFolderComponent.set(false);
-					await goto(`/app/${itemId}`, { keepFocus: true });
-					console.log('end onclick');
+					if (waiting) {
+						clearTimeout(timeout);
+						isEditing[itemId] = true;
+						waiting = false;
+						return;
+					}
+					waiting = true;
+					timeout = setTimeout(() => {
+						changeSelectedFolderId(folderInfo.folder_id);
+						isOpenCreatedFolderComponent.set(false);
+						goto(`/app/${itemId}`, { keepFocus: true });
+						waiting = false;
+					}, delay);
 				}}
 				on:m-keydown={async () => {
 					console.log('start keydown');

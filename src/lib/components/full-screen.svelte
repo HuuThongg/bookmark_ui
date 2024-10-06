@@ -13,6 +13,7 @@
 	import { Plus } from 'lucide-svelte';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
+	import TrashUi from './sidebar-ui/trashUI.svelte';
 
 	export let defaultLayout = [65, 240, 655];
 	export let defaultCollapsed = false;
@@ -76,7 +77,7 @@
 									<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
 									<Avatar.Fallback>CN</Avatar.Fallback>
 								</Avatar.Root>
-								<p class="pl-2">{$user.fullname || 'Default name'}</p>
+								<p class="pl-2">{$user?.fullname || 'Default name'}</p>
 							</Button>
 						</DropdownMenu.Trigger>
 						<DropdownMenu.Content class="w-56">
@@ -98,9 +99,8 @@
 					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
 						<CreateFolderUI />
 					{/if}
-					<div class="mt-2 w-full">
-						<I />
-					</div>
+					<TrashUi />
+					<I />
 					<div class="mt-2 w-full px-5">
 						<ul>
 							{#each bookmarks as bookmark}

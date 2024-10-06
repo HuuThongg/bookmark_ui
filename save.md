@@ -10,3 +10,10 @@ form.submit()} />
   Dashboard
 </a>
 ```
+```javascript
+	const s = getSession();
+	if (!s || (s && !s.access_token)) {
+		await goto(AppRoute.ACCOUNT_LOGIN);
+		return;
+	}
+```

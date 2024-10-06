@@ -6,24 +6,28 @@
 	import { currentFolderAtSlug } from '$lib/stores/folder.store';
 	import { selectedLinksMode } from '$lib/stores';
 	import ActionToolbar from './action-toolbar.svelte';
-
+	import { get } from 'svelte/store';
+	import type { SelectedFolderNameID } from '$lib/types/folder';
+	let folderAtSlug: SelectedFolderNameID;
+	$: folderAtSlug = $currentFolderAtSlug;
 	function toggleSelectedLinksMode() {
 		selectedLinksMode.update((v) => !v);
 	}
+	//const folderAtSlug = get(currentFolderAtSlug);
 </script>
 
 <div class="mb-4 flex items-center justify-between">
 	<div class="flex items-center">
 		{#if $selectedLinksMode}
-			<Button on:click={toggleSelectedLinksMode}>
+			<Button variant="ghost" on:click={toggleSelectedLinksMode}>
 				<SquareMinus class="mr-2" />
 			</Button>
 		{:else}
-			<Button on:click={toggleSelectedLinksMode}>
+			<Button variant="ghost" on:click={toggleSelectedLinksMode}>
 				<Cloud class="mr-2" />
 			</Button>
 		{/if}
-		<h2 class="text-xl font-semibold">{$currentFolderAtSlug.folder_name}</h2>
+		<h2 class="text-xl font-semibold">{folderAtSlug.folder_name}</h2>
 	</div>
 	<div class="flex items-center space-x-4">
 		{#if $selectedLinksMode}

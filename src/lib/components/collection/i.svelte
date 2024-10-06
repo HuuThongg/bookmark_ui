@@ -38,6 +38,7 @@
 </script>
 
 <div class="flex h-full w-full flex-col">
+	<div class="mt-2 pl-4">Collections</div>
 	<ul class="overflow-auto pb-4 pt-2" {...$tree}>
 		<Tree {treeItems} />
 	</ul>
