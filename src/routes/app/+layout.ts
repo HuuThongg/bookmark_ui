@@ -4,21 +4,21 @@ import { folders } from '$lib/stores/folder.store';
 import { getCookie } from '$lib/utils';
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async () => {
-	console.log('app layout.ts');
-	await authenticate({ admin: true });
-	const foldersList = await getAllFolders();
+export const load: LayoutLoad = async ({ fetch }) => {
+  console.log('app layout.ts');
+  await authenticate({ admin: true });
+  const foldersList = await getAllFolders(fetch);
 
-	if (foldersList) {
-		folders.set(foldersList);
-	}
-	let layout: number[] | undefined;
-	let collapsed: boolean | undefined;
-	const layoutCookie = getCookie('PaneForge:layout');
-	const collapsedCookie = getCookie('PaneForge:collapsed');
+  if (foldersList) {
+    folders.set(foldersList);
+  }
+  let layout: number[] | undefined;
+  let collapsed: boolean | undefined;
+  const layoutCookie = getCookie('PaneForge:layout');
+  const collapsedCookie = getCookie('PaneForge:collapsed');
 
-	if (layoutCookie) layout = JSON.parse(layoutCookie);
-	if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
+  if (layoutCookie) layout = JSON.parse(layoutCookie);
+  if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
 
-	return { layout, collapsed };
+  return { layout, collapsed };
 };

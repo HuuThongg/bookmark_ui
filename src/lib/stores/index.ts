@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 export const searching = writable<boolean>(false)
 export const isDeleting = writable<boolean>(false);
 

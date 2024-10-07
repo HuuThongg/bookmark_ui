@@ -2,10 +2,7 @@
 	import { ArrowLeft, FolderIcon, FolderOpen } from 'lucide-svelte';
 	import JS from './icons/JS.svelte';
 	import Svelte from './icons/Svelte.svelte';
-	export interface TreeItem {
-		children: TreeItem[];
-		folderInfo: Folder;
-	}
+
 	export const icons = {
 		svelte: Svelte,
 		folder: FolderIcon,
@@ -21,12 +18,17 @@
 	import { goto } from '$app/navigation';
 	import { cn } from '$lib/utils';
 	import CreateFolderUi from '../sidebar-ui/create-folder-ui.svelte';
-	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
+	import {
+		sidebarSelectedFolderId,
+		treeStructureFlattenStore,
+		treeStructureStore
+	} from '$lib/stores/folder.store';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { page } from '$app/stores';
 	import { initInput } from '$lib/actions/focus';
 	import { renameFolder } from '$lib/api/folder/renameFolder';
 	import type { Folder } from '$lib/types/folder';
+	import type { TreeItem } from '$lib/types';
 	export let treeItems: TreeItem[];
 	export let level = 1;
 	export let isEditing: { [key: string]: boolean } = {}; // Track which folder is being edited
@@ -35,6 +37,8 @@
 	let waiting = false;
 	let clickType = '';
 	let elementInput: HTMLInputElement | null = null;
+	let folderStructure: TreeItem[] = [];
+	$: folderStructure = $treeStructureStore;
 	function changeSelectedFolderId(folderId: string) {
 		console.log('folder_id', folderId);
 		if (!($sidebarSelectedFolderId === folderId)) {
@@ -107,11 +111,31 @@
 						waiting = false;
 					}, delay);
 				}}
-				on:m-keydown={async () => {
-					console.log('start keydown');
-					changeSelectedFolderId(folderInfo.folder_id);
-					//await goto(`/app/${itemId}`, { keepFocus: true });
-					console.log('/end keydown');
+				on:m-keydown={async (e) => {
+					let nextItem;
+					if (e.detail.originalEvent.code === 'ArrowDown') {
+						if ($isExpanded(itemId) && treeItems[i]?.children?.[0]) {
+							nextItem = treeItems[i].children[0];
+						} else if (treeItems[i + 1]) {
+							nextItem = treeItems[i + 1]; // Next sibling
+						} else {
+							//console.log('d', $treeStructureFlattenStore);
+							//let index = $treeStructureFlattenStore.findIndex((e) => e.title === folderInfo.title);
+							//nextItem = $treeStructureFlattenStore[index + 1];
+						}
+						await goto(`/app/${nextItem.folder_id}`, { keepFocus: true });
+					}
+					if (e.detail.originalEvent.code === 'ArrowUp') {
+						if ($isExpanded(itemId) && treeItems[i]?.children?.[0]) {
+							nextItem = treeItems[i].children[0]; // First child
+						} else if (treeItems[i - 1]) {
+							nextItem = treeItems[i - 1];
+						} else {
+							//let index = $treeStructureFlattenStore.findIndex((e) => e.title === folderInfo.title);
+							//nextItem = $treeStructureFlattenStore[index - 1];
+						}
+						await goto(`/app/${nextItem.folder_id}`, { keepFocus: true });
+					}
 				}}
 			>
 				<!-- Toggle icon -->

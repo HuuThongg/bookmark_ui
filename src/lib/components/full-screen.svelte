@@ -14,6 +14,7 @@
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 	import TrashUi from './sidebar-ui/trashUI.svelte';
+	import AllCollection from './sidebar-ui/AllCollection.svelte';
 
 	export let defaultLayout = [65, 240, 655];
 	export let defaultCollapsed = false;
@@ -99,6 +100,7 @@
 					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
 						<CreateFolderUI />
 					{/if}
+					<AllCollection />
 					<TrashUi />
 					<I />
 					<div class="mt-2 w-full px-5">

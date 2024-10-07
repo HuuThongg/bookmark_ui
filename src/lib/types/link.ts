@@ -26,3 +26,8 @@ export interface Link {
 export interface OpenContextMenuEventDetail {
   link_id: string;
 }
+export interface LinkIdType {
+  link_id: string
+}
+
+export type LinkSelectedChecboxType = Record<string, boolean>

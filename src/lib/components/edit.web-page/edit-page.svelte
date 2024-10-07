@@ -7,17 +7,25 @@
 
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Heart, Bell, ChevronsDownUp, Check, Plus } from 'lucide-svelte';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '$lib/utils.js';
 	import TagInput from './tag-input.svelte';
-	let note = '';
-	let collection = 'hello1';
-	let tags: string[] = [];
-	let url = 'https://purecode.ai';
-	let isDialogOpen = false;
+	import { addNote } from '$lib/api/link/addNote';
+	import { editedLink } from '$lib/stores/link.store';
+	import { changeLinkTitle } from '$lib/api/link/changeLinkTitle';
+	import { changeLinkURL } from '$lib/api/link/changeLinkURL';
 
+	let isDialogOpen = false;
+	$: link = $editedLink;
+	$: orignalNote = $editedLink.link_notes ?? '';
+	$: note = orignalNote;
+	$: oldTitle = $editedLink.link_title ?? 'title';
+	$: title = oldTitle;
+
+	$: oldURL = $editedLink.link_url ?? 'https://example.com';
+	$: URL = oldURL;
 	const frameworks = [
 		{
 			value: 'sveltekit',
@@ -46,46 +54,71 @@
 	let searchValue = '';
 
 	$: selectedValue = frameworks.find((f) => f.value === value)?.label ?? 'Select a framework...';
-
-	// We want to refocus the trigger button when the user selects
-	// an item from the list so users can continue navigating the
-	// rest of the form with the keyboard.
 	function closeAndFocusTrigger(triggerId: string) {
 		open = false;
 		tick().then(() => {
 			document.getElementById(triggerId)?.focus();
 		});
 	}
-	const collections = ['hello1', 'hello2', 'hello3'];
 	const tagOptions = ['AI', 'UI', 'Design', 'Code'];
 
 	function handleSave() {
-		// Implement save logic here
-		console.log('Saving note:', { note, collection, tags, url });
+		//console.log('Saving note:', { note, collection, tags, url });
 		isDialogOpen = false;
 	}
-	// Function to handle adding a new framework
 	function addFramework(newFramework: string) {
 		frameworks.push({ value: newFramework, label: capitalize(newFramework) });
 		value = newFramework; // Set the new framework as selected
 	}
 
-	// Helper function to capitalize the first letter of the framework label
 	function capitalize(str: string) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	async function handleUpdateNote() {
+		if (link && link.link_id) {
+			if (note !== orignalNote) {
+				await addNote(link.link_id, note.trim());
+			}
+		}
+	}
+	async function handleUpdateTitle() {
+		if (link && link.link_id) {
+			title = title.trim();
+			if (title === oldTitle) return;
+			await changeLinkTitle(link.link_id, title);
+		}
+	}
+
+	async function handleUpdateLinkURL() {
+		if (link && link.link_id) {
+			URL = URL.trim();
+			if (URL === oldURL) return;
+			await changeLinkURL(link.link_id, URL);
+		}
 	}
 </script>
 
 <Card.Root class="w-full">
 	<Card.Content class="w-full">
-		<Card.Header>
-			<Card.Title>Add New Note</Card.Title>
-			<Card.Description>Create a new note with PureCode AI</Card.Description>
-		</Card.Header>
+		<div class="grid gap-2">
+			<Label for="title">Title</Label>
+			<Input
+				id="title"
+				bind:value={title}
+				on:blur={handleUpdateTitle}
+				placeholder="https://example.com"
+			/>
+		</div>
+
 		<div class="grid gap-4 py-4">
 			<div class="grid gap-2">
 				<Label for="note">Note</Label>
-				<Textarea id="note" bind:value={note} placeholder="Enter your note here..." />
+				<Textarea
+					id="note"
+					bind:value={note}
+					on:blur={handleUpdateNote}
+					placeholder="Enter your note here..."
+				/>
 			</div>
 			<Dialog.Root>
 				<Dialog.Trigger class="text-left">Collection</Dialog.Trigger>
@@ -144,7 +177,12 @@
 			</Popover.Root>
 			<div class="grid gap-2">
 				<Label for="url">URL</Label>
-				<Input id="url" bind:value={url} placeholder="https://example.com" />
+				<Input
+					id="url"
+					bind:value={URL}
+					on:blur={handleUpdateLinkURL}
+					placeholder="https://example.com"
+				/>
 			</div>
 		</div>
 		<div class="flex items-center justify-between">

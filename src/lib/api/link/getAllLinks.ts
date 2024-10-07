@@ -1,17 +1,23 @@
+
 import type { Link } from '$lib/types/link';
 import { getSession } from '$lib/stores/user.store';
 import { PUBLIC_API_ENDPOINT } from '$env/static/public';
-import { links } from '$lib/stores/link.store';
+import { allLinks } from '$lib/stores/link.store';
+import { toast } from 'svelte-sonner';
+import { goto } from '$app/navigation';
+import { AppRoute } from '$lib/constants';
 import type { Fetch } from '$lib/types';
 
-export async function getFolderLinks(fetch: Fetch, folderID: string | undefined): Promise<Link[]> {
-  if (!folderID) throw new Error('folderID does not exists');
-
+export async function getAllLinks(fetch: Fetch): Promise<Link[] | undefined> {
   const s = getSession();
-  const accountID = s.account?.id;
-  if (!accountID) throw new Error('accountID does not exists');
-  console.log("getFolderLinks folderID", folderID)
-  let url = `${PUBLIC_API_ENDPOINT}/private/link/get_folder_links/${accountID}/${folderID}`;
+  if (!s || (s && !s.access_token)) {
+    toast.error("session is timeout")
+    await goto(AppRoute.ACCOUNT_LOGIN);
+    return
+  }
+
+
+  let url = `${PUBLIC_API_ENDPOINT}/private/link/all/${s.account.id}`;
   const res = await fetch(url, {
     method: 'GET',
     mode: 'cors',
@@ -27,13 +33,12 @@ export async function getFolderLinks(fetch: Fetch, folderID: string | undefined)
 
   const result = await res.json();
 
-  console.log('getFolderLinks res', result[0]);
   let linksList: Link[] = [];
   if (result[0]) {
     linksList = result[0];
-    links.set(linksList);
+    allLinks.set(linksList);
   } else {
-    links.set([]);
+    allLinks.set([]);
   }
   return linksList;
 }

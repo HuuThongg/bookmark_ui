@@ -12,7 +12,6 @@ export async function moveLinksToTrash(ls: Partial<Link>[]) {
     await goto(AppRoute.ACCOUNT_LOGIN);
     return;
   }
-  console.log("hello")
 
   const response = await fetch(`${PUBLIC_API_ENDPOINT}/private/link/moveLinksToTrash`, {
     method: 'PATCH',

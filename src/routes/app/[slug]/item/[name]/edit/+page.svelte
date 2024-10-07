@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
 	import EditPage from '$lib/components/edit.web-page/edit-page.svelte';
-	import FullScreen from '$lib/components/full-screen.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Bell, ChevronDown, ExternalLink, Heart, Maximize2, X } from 'lucide-svelte';
-	import { onMount } from 'svelte';
+	import { ExternalLink, Maximize2, X } from 'lucide-svelte';
 
 	let bookmarks = [
 		{

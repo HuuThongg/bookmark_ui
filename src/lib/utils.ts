@@ -5,6 +5,8 @@ import type { TransitionConfig } from 'svelte/transition';
 import { isOpenCreatedFolderComponent } from './stores';
 import { sidebarSelectedFolderId } from './stores/folder.store';
 import { toast } from 'svelte-sonner';
+import type { Folder } from './types/folder';
+import type { TreeItem } from './types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -86,3 +88,44 @@ export const copyToClipboard = async (secret: string) => {
     toast.error("Cnable to copy to clipboard")
   }
 };
+
+
+export const debounce = (callback: Function, wait = 300) => {
+  let timeout: ReturnType<typeof setTimeout>;
+
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback(...args), wait);
+  };
+};
+
+//export function buildTree(folders: Folder[], parentFolderID: string | null): TreeItem[] {
+//  const currentFolders = folders.filter((folder) => folder.subfolder_of === parentFolderID);
+//  return currentFolders.map((folder) => {
+//    const children = buildTree(folders, folder.folder_id);
+//    return {
+//      folderInfo: folder,
+//      children: children.length > 0 ? children : undefined, // Omit empty children
+//    };
+//  });
+//}
+export function buildTree(folders: Folder[], parentFolderID: string | null): TreeItem[] {
+  const currentFolders = folders.filter((folder) => folder.subfolder_of === parentFolderID);
+
+  return currentFolders.map((folder) => {
+    const children = buildTree(folders, folder.folder_id);
+
+    // Create a copy to avoid mutating the original item
+    const treeItem: TreeItem = { ...folder, folderInfo: folder };
+
+    // Remove children if undefined or empty
+    if (!children || children.length === 0) {
+      delete treeItem.children;
+    } else {
+      treeItem.children = children;
+    }
+
+    return treeItem;
+  });
+}
+

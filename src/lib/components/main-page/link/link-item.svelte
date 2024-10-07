@@ -15,8 +15,8 @@
 	import { deleteLinksForever } from '$lib/api/link/deleteLinksForever';
 	import { loadingStatesStore, type LoadingStates } from '$lib/stores';
 	import LoadingSpinner from '$lib/components/shared-components/loading-spinner.svelte';
-	import { links } from '$lib/stores/link.store';
-	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { checkboxLinkStore, selectedLinkIdsToEdit } from '$lib/stores/link.store';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import type { Link, OpenContextMenuEventDetail } from '$lib/types/link';
 	import { page } from '$app/stores';
 	import { cn, copyToClipboard } from '$lib/utils';
@@ -25,11 +25,14 @@
 
 	export let link: Link;
 	export let currentOpenMenu: string | null;
-	let linkList: Link[] = [];
-	$: linkList = $links;
 	let loadingStates: LoadingStates = {};
-	const a = links.subscribe((v) => console.log('v: ', v));
 
+	$: checked = $checkboxLinkStore[link.link_id] ?? false;
+
+	$: console.log('checked', checked);
+	$: linkIdsSelected = $selectedLinkIdsToEdit;
+	$: isEdited = linkIdsSelected.findIndex((l) => l === link.link_id) !== -1;
+	$: console.log('isEdited', isEdited);
 	const unsubscribe = loadingStatesStore.subscribe((value) => {
 		loadingStates = value;
 	});
@@ -41,20 +44,34 @@
 	function openMenu() {
 		dispatch('openContextMenu', { link_id: link.link_id });
 	}
+
+	function handleToggleSelectedLink() {
+		selectedLinkIdsToEdit.update((v) => {
+			if (!checked) {
+				return [...v, link.link_id];
+			} else {
+				return v.filter((l) => l !== link.link_id);
+			}
+		});
+	}
 	onDestroy(() => {
 		unsubscribe();
-		a();
 	});
 
-	const currPathname = $page.url.pathname.split('/').at(2);
+	let folderIDslug = link.link_id;
+	$: currPathname = $page.url.pathname.split('/').at(2) ?? '';
 
+	$: folderIDslug = currPathname === 'all' ? link.folder_id : currPathname;
 </script>
 
 <ContextMenu.Root>
 	<ContextMenu.Trigger on:contextmenu={openMenu}>
 		<a
-			href={`/app/${currPathname}/item/${link.link_id}/edit`}
-			class="flex items-center justify-between rounded-lg bg-gray-800 p-3 hover:bg-gray-700"
+			href={`/app/${folderIDslug}/item/${link.link_id}/edit`}
+			class={cn(
+				'group/item relative flex items-center justify-between rounded-lg bg-gray-800 p-3 hover:bg-gray-700 ',
+				{ 'bg-red-400': isEdited }
+			)}
 		>
 			<div class="flex items-center space-x-3">
 				<img src={link.link_thumbnail} alt="" class="h-10 w-10 rounded" />
@@ -66,26 +83,42 @@
 					</p>
 				</div>
 			</div>
-			<div class="flex items-center space-x-2">
-				<Button variant="ghost" size="sm" class="text-gray-400">
-					<Eye class="h-4 w-4" />
-				</Button>
-				<Button variant="ghost" size="sm" class="text-gray-400">
-					<Pencil class="h-4 w-4" />
-				</Button>
-				<Button
-					variant="ghost"
-					size="sm"
-					class="text-gray-400"
-					on:click={async () => await moveLinksToTrash([link])}
-					aria-disabled={loadingStates[link.link_id]}
-				>
-					{#if loadingStates[link.link_id]}
-						<LoadingSpinner />
-					{:else}
-						<Trash2 class="h-4 w-4" />
-					{/if}
-				</Button>
+			{#if checked}
+				<div class="box">This is a selected box</div>
+			{/if}
+			<label
+				class={`absolute left-2 top-1 z-[1] cursor-pointer ${isEdited ? 'visible ' : 'invisible group-hover/item:visible'}`}
+				title="Select"
+			>
+				<input
+					type="checkbox"
+					bind:value={checked}
+					class="cursor-pointer"
+					on:click|stopPropagation={handleToggleSelectedLink}
+				/>
+			</label>
+			<div class="invisible absolute right-2 top-2 z-[1] group-hover/item:visible">
+				<div class=" flex items-center space-x-2" style="">
+					<Button variant="ghost" size="sm" class=" bg-zinc-600 text-gray-400">
+						<Eye class="h-4 w-4" />
+					</Button>
+					<Button variant="ghost" size="sm" class="bg-zinc-600 text-gray-400 ">
+						<Pencil class="h-4 w-4" />
+					</Button>
+					<Button
+						variant="ghost"
+						size="sm"
+						class="bg-zinc-600 text-gray-400 "
+						on:click={async () => await moveLinksToTrash([link])}
+						aria-disabled={loadingStates[link.link_id]}
+					>
+						{#if loadingStates[link.link_id]}
+							<LoadingSpinner />
+						{:else}
+							<Trash2 class="h-4 w-4" />
+						{/if}
+					</Button>
+				</div>
 			</div>
 		</a>
 	</ContextMenu.Trigger>
@@ -127,7 +160,7 @@
 
 			<ContextMenu.Separator />
 			<ContextMenu.Item
-				on:click={async () => await goto(`/app/${currPathname}/item/${link.link_id}/edit`)}
+				on:click={async () => await goto(`/app/${folderIDslug}/item/${link.link_id}/edit`)}
 				class={cn('cursor-pointer', buttonClass)}
 			>
 				<div class="flex items-center">
@@ -148,3 +181,32 @@
 		</ContextMenu.Content>
 	{/if}
 </ContextMenu.Root>
+
+<style>
+	/* Hide the default checkbox */
+	input[type='checkbox'] {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		width: 15px;
+		height: 15px;
+		cursor: pointer;
+	}
+
+	/* Style the checked state to display an "X" */
+	input[type='checkbox']:not(checked) {
+		background-color: #61afef;
+		position: relative;
+	}
+
+	input[type='checkbox']:not(checked)::before {
+		content: 'X';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		color: white;
+		font-size: 10px;
+		font-weight: bold;
+	}
+</style>
