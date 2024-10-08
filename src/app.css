@@ -10,19 +10,38 @@
 		--card-foreground: 60 9.1% 97.8%;
 		--popover: 20 14.3% 4.1%;
 		--popover-foreground: 60 9.1% 97.8%;
-		--primary: 47.9 95.8% 53.1%;
-		--primary-foreground: 26 83.3% 14.1%;
+		--primary: 40 52% 71%;
+		--primary-foreground: 228 3% 17%;
 		--secondary: 12 6.5% 15.1%;
 		--secondary-foreground: 60 9.1% 97.8%;
-		--muted: 12 6.5% 15.1%;
+		--muted: 225 2.96% 60%;
 		--muted-foreground: 24 5.4% 63.9%;
-		--accent: 12 6.5% 15.1%;
-		--accent-foreground: 60 9.1% 97.8%;
+		--accent: 40 52% 71%;
+		--accent-foreground: 228 3% 17%;
 		--destructive: 0 62.8% 30.6%;
 		--destructive-foreground: 60 9.1% 97.8%;
 		--border: 12 6.5% 15.1%;
 		--input: 12 6.5% 15.1%;
-		--ring: 35.5 91.7% 32.9%;
+		/*--ring: 35.5 91.7% 32.9%;*/
+		--ring: 207 80% 49%;
+
+		--sidebar-bg-color: 240 2.78% 14.12%;
+		--bg: 240 3% 17%;
+		--hover-bg-color: 0 0% 100% / 7%;
+		--bg-alternative-color: 0 0% 0% / 30%;
+		--disable-bg-color: 240 2% 16%;
+		--active-bg-color: 225 4% 22%;
+		--danger-color: 6 100% 68%;
+		--primary-text-color: 225 3.92% 80%;
+		--secondary-text-color: 225 2.96% 60%;
+		--disable-text-color: 0 0% 100% / 40%;
+		--shadow-color: 0 0% 100% / 17%;
+		--color: 240 2% 90%;
+
+		--accent-color: 40 52% 71%;
+		/*--accent-color: 207 80% 49%;*/
+		--bg-accent-color: 228 3% 17%;
+		--active-bg-color: 255 3.57% 22%;
 	}
 
 	.dark {
@@ -45,6 +64,20 @@
 		--border: 12 6.5% 15.1%;
 		--input: 12 6.5% 15.1%;
 		--ring: 35.5 91.7% 32.9%;
+		--sidebar-bg-color: 240 2.78% 14.12%;
+		--bg: 240 3% 17%;
+		--hover-bg-color: 0 0% 100% / 7%;
+		--bg-alternative-color: 0 0% 0% 30%;
+		--disable-bg-color: 240 2% 16%;
+		--active-bg-color: 225 4% 22%;
+		--danger-color: 6 100% 68%;
+		--primary-text-color: 225 3.92% 80%;
+		--secondary-text-color: 225 2.96% 60%;
+		--disable-text-color: 0 0% 100% / 40%;
+		--shadow-color: 0 0% 100% / 17%;
+		--color: 240 2% 90%;
+		/*--accent-color: 40 50% 71%;*/
+		--accent-color: 207 80% 49%;
 	}
 }
 

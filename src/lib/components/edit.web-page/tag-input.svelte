@@ -11,7 +11,7 @@
 	// Create Tags Input
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
-		states: { tags }
+		states: { tags, inputValue }
 	} = createTagsInput({
 		defaultTags: initialTags,
 		unique: true,
@@ -20,11 +20,11 @@
 		},
 		addOnPaste: true
 	});
-
+	$: console.log('ip', $inputValue);
 	// Create Combobox for tag suggestions
 	const {
 		elements: { menu, input: comboboxInput, option, label },
-		states: { open, inputValue, touchedInput, selected },
+		states: { open, touchedInput, selected, inputValue: D },
 		helpers: { isSelected }
 	} = createCombobox<string>({
 		forceVisible: true

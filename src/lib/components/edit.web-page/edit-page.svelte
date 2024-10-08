@@ -133,48 +133,6 @@
 				</Dialog.Content>
 			</Dialog.Root>
 			<TagInput />
-			<Popover.Root bind:open let:ids>
-				<Popover.Trigger asChild let:builder>
-					<Button
-						builders={[builder]}
-						variant="outline"
-						role="combobox"
-						aria-expanded={open}
-						class="w-[200px] justify-between"
-					>
-						{selectedValue}
-						<ChevronsDownUp class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Button>
-				</Popover.Trigger>
-				<Popover.Content class="w-[200px] p-0">
-					<Command.Root>
-						<Command.Input bind:value={searchValue} placeholder="Search framework..." class="h-9" />
-						<Command.Empty>
-							<p>No framework found.</p>
-							<Button variant="ghost" class="mt-2" on:click={() => addFramework(searchValue)}>
-								<Plus class="mr-2 h-4 w-4" />
-								Add "{searchValue}"
-							</Button>
-						</Command.Empty>
-						<Command.Group>
-							{#each frameworks as framework}
-								<Command.Item
-									value={framework.value}
-									onSelect={(currentValue) => {
-										value = currentValue;
-										closeAndFocusTrigger(ids.trigger);
-									}}
-								>
-									<Check
-										class={cn('mr-2 h-4 w-4', value !== framework.value && 'text-transparent')}
-									/>
-									{framework.label}
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
 			<div class="grid gap-2">
 				<Label for="url">URL</Label>
 				<Input
