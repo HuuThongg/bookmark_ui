@@ -13,7 +13,7 @@ export const sidebarSelectedFolderId = writable<string | null>(null);
 
 export const currentFolder = writable<string>('');
 
-export const currentFolderAtSlug = writable<SelectedFolderNameID>();
+export const currentFolderAtSlug = writable<SelectedFolderNameID | null>(null);
 
 
 export const foldersFound = writable<Folder[]>([]);

@@ -26,11 +26,12 @@
 		Star,
 		StarOff
 	} from 'lucide-svelte';
-
+	import { page } from '$app/stores';
 	let moveDialogOpen = false;
 	let addTagsDialogOpen = false;
 	let deleteDialogOpen = false;
 
+	$: isIconNameHidden = $page.url.pathname.includes('/item');
 	function handleOpen() {
 		// Implement open functionality
 	}
@@ -61,7 +62,7 @@
 			<DialogTrigger asChild let:builder>
 				<Button builders={[builder]} variant="ghost" class="p-2 text-primary-text">
 					<Folder class="mr-2 size-4" />
-					Move
+					<span class={isIconNameHidden ? 'hidden' : 'block'}>Move</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
@@ -76,7 +77,7 @@
 			<DialogTrigger>
 				<Button variant="ghost" class="p-2 text-primary-text">
 					<Hash class="mr-2 h-4 w-4" />
-					Add tags
+					<span class={isIconNameHidden ? 'hidden' : 'block'}>Add tags</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
@@ -90,7 +91,7 @@
 			<DialogTrigger>
 				<Button variant="ghost" size="sm" class="p-2 text-primary-text" on:click={handleDelete}>
 					<Trash class="mr-2 size-4" />
-					Delete
+					<span class={isIconNameHidden ? 'hidden' : 'block'}>Delete</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
@@ -103,7 +104,7 @@
 
 		<Button variant="ghost" size="sm" class="p-2 text-primary-text" on:click={handleOpen}>
 			<ExternalLink class="mr-2 size-4" />
-			Open
+			<span class={isIconNameHidden ? 'hidden' : 'block'}>Open</span>
 		</Button>
 
 		<DropdownMenu>

@@ -29,12 +29,12 @@
 
 	function onCollapse() {
 		isCollapsed = true;
-		document.cookie = `PaneForge:collapsed=${true}`;
+		document.cookie = `PaneForge:collapsed=${true}; path=/`;
 	}
 
 	function onExpand() {
 		isCollapsed = false;
-		document.cookie = `PaneForge:collapsed=${false}`;
+		document.cookie = `PaneForge:collapsed=${false}; path=/`;
 	}
 
 	let bookmarks = [

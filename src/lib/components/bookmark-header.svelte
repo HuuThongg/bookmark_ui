@@ -12,7 +12,7 @@
 	import { searchInputFocused } from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 	import LoadingSpinner from './shared-components/loading-spinner.svelte';
-	import { currentFolderAtSlug, foldersFound } from '$lib/stores/folder.store';
+	import { currentFolderAtSlug, folderName, foldersFound } from '$lib/stores/folder.store';
 	import { addLink } from '$lib/api/link/add';
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
@@ -27,10 +27,14 @@
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
 				try {
-					const link = await addLink(form.data.url, folerID_Name.folder_id);
+					if (!folerID_Name) {
+						toast.warning('Foldernam is empty');
+						return;
+					}
+					//const link = await addLink(form.data.url, folerID_Name.folder_id);
 					toast.success(`Added ${form.data.url}`);
 					if (!link) return;
-					await goto(`/app/${$currentFolderAtSlug.folder_id}/item/${link.link_id}/edit`);
+					await goto(`/app/${$currentFolderAtSlug?.folder_id}/item/${link.link_id}/edit`);
 				} catch (error) {
 					toast.error('Error: adding a link');
 				}
@@ -150,7 +154,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Button aria-disabled={$submitting}>
-					Add to {$currentFolderAtSlug.folder_name}
+					Add to {$currentFolderAtSlug?.folder_name}
 					{#if $submitting}
 						<span class="ml-2 h-6">
 							<LoadingSpinner />
