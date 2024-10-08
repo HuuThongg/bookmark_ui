@@ -2,6 +2,7 @@ import type { Link, LinkSelectedChecboxType } from '$lib/types/link';
 import { writable, derived } from 'svelte/store';
 
 export const allLinks = writable<Link[]>([]);
+export const allLinksLength = derived(allLinks, ($links) => $links.length)
 export const trashLinks = writable<Partial<Link>[]>([]);
 
 export const trashLinksLength = derived(

@@ -6,11 +6,11 @@ const buttonVariants = tv({
   base: 'ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
   variants: {
     variant: {
-      default: 'bg-accent-color text-bg-accent-color hover:bg-accent-color/90 active:active-bg-color',
+      default: 'bg-accent-color text-bg-accent-color hover:bg-hover-accent-color active:active-bg-color',
       destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
       outline: 'text-color bg-bg hover:bg-hover-bg hover:text-primary-text  border border-input',
       secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-      ghost: 'hover:bg-accent hover:text-primary-text',
+      ghost: 'focus-visible:bg-active-bg-color hover:bg-hover-bg hover:text-primary-text',
       link: 'text-accent-color underline-offset-4 hover:underline'
     },
     size: {

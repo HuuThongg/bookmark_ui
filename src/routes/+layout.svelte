@@ -5,7 +5,7 @@
 
 <Toaster />
 <div
-	class="relative flex max-h-screen min-h-screen flex-col bg-background"
+	class="bg-bg relative flex max-h-screen min-h-screen flex-col"
 	id="page"
 	data-vaul-drawer-wrapper
 >

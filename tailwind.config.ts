@@ -30,6 +30,7 @@ const config: Config = {
         'shadow-color': 'hsl(var(--shadow-color))',
         'color': 'hsl(var(--color) / <alpha-value>)',
         'accent-color': 'hsl(var(--accent-color) / <alpha-value>)',
+        'hover-accent-color': 'hsl(var(--hover-accent-color) / <alpha-value>)',
         'bg-accent-color': 'hsl(var(--bg-accent-color) / <alpha-value>)',
         'active-bg-color': 'hsl(var(--active-bg-color) / <alpha-value>)',
         border: 'hsl(var(--border) / <alpha-value>)',

@@ -5,7 +5,6 @@
 	import type { Folder } from '$lib/types/folder'; // Folder and Link interfaces
 	import Tree from './t.svelte';
 	import type { TreeItem } from '$lib/types';
-	// Create tree context
 	const ctx = createTreeView({
 		defaultExpanded: []
 	});

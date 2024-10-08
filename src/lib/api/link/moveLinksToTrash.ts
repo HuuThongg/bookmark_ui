@@ -3,10 +3,10 @@ import { PUBLIC_API_ENDPOINT } from "$env/static/public";
 import { AppRoute } from "$lib/constants";
 import { getSession } from "$lib/stores/user.store";
 import type { Link } from "$lib/types/link";
-import { links, trashLinks } from "$lib/stores/link.store";
+import { links, trashLinks, linksFound } from "$lib/stores/link.store";
 
 let l: Partial<Link>[] = [];
-export async function moveLinksToTrash(ls: Partial<Link>[]) {
+export async function moveLinksToTrash(linkIds: string[]) {
   const s = getSession();
   if (!s?.access_token) {
     await goto(AppRoute.ACCOUNT_LOGIN);
@@ -25,7 +25,7 @@ export async function moveLinksToTrash(ls: Partial<Link>[]) {
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer',
     body: JSON.stringify({
-      link_ids: ls.map((li) => li.link_id)
+      link_ids: linkIds
     })
   });
   console.log("res", response)
@@ -34,6 +34,7 @@ export async function moveLinksToTrash(ls: Partial<Link>[]) {
 
   const newTrashedLinks: Partial<Link>[] = result[0];
 
+  console.log("newTrashedLinks", newTrashedLinks)
   const unsubscribe = trashLinks.subscribe((values) => {
     l = [...l, ...values];
   });
@@ -49,7 +50,7 @@ export async function moveLinksToTrash(ls: Partial<Link>[]) {
   }
   trashLinks.set(l)
 
-  //linksFound.set(l);
+  linksFound.set(l);
 
   //removeItemsSelected();
 

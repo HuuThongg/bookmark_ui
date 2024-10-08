@@ -69,17 +69,17 @@
 	{@const itemId = `${folderInfo.folder_id}`}
 	{@const hasChildren = !!children?.length}
 
-	<li class={level !== 1 ? 'pl-4' : ''}>
+	<li class={cn('hover:bg-hover-bg', level !== 1 ? 'pl-4' : '')}>
 		{#if isEditing[itemId]}
 			<form
 				on:submit|preventDefault={async () => handleSubmit(folderInfo, itemId)}
-				class="flex items-center gap-x-1 px-4"
+				class="flex items-center gap-x-1 bg-hover-bg px-4"
 			>
-				<svelte:component this={icons['folderOpen']} class="h-4 w-4 pl-4" />
+				<svelte:component this={icons['folderOpen']} class="size-5 stroke-primary-text" />
 				<input
 					type="text"
 					id="folderName"
-					class="w-full select-none focus-visible:bg-neutral-700"
+					class="w-full select-none bg-hover-bg pl-2 focus-visible:outline-0"
 					bind:this={elementInput}
 					bind:value={folderInfo.folder_name}
 					on:input={(event) => handleNameChange(event, folderInfo)}
@@ -90,9 +90,9 @@
 		{:else}
 			<button
 				class={cn(
-					'flex w-full items-center gap-1 rounded-none p-1 px-4 focus:bg-neutral-700',
+					'flex w-full items-center gap-1 rounded-none p-1 px-4 focus:bg-hover-bg',
 					($isSelected(itemId) || $sidebarSelectedFolderId === folderInfo.folder_id) &&
-						'bg-neutral-700'
+						'bg-hover-bg'
 				)}
 				use:melt={$item({ id: itemId, hasChildren })}
 				aria-expanded={$isExpanded(itemId)}
@@ -140,14 +140,13 @@
 			>
 				<!-- Toggle icon -->
 				<!-- {#if hasChildren && $isExpanded(itemId)} -->
-				<svelte:component this={icons['folderOpen']} class="h-4 w-4" />
+				<svelte:component this={icons['folderOpen']} class="size-5 stroke-primary-text" />
 
-				<span class="select-none pl-1">{folderInfo.folder_name}</span>
+				<span class="select-none pl-1 text-color">{folderInfo.folder_name}</span>
 
 				<!-- Selected icon -->
 				{#if $isSelected(itemId)}
 					<p>-</p>
-					<!-- <svelte:component this={icons['highlight']} class="h-4 w-4" /> -->
 				{/if}
 			</button>
 		{/if}

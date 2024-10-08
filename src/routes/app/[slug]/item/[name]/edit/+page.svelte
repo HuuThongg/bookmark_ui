@@ -2,66 +2,24 @@
 	import EditPage from '$lib/components/edit.web-page/edit-page.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { ExternalLink, Maximize2, X } from 'lucide-svelte';
-
-	let bookmarks = [
-		{
-			title: 'Raindrop.io — All in One Bookmark Manager',
-			url: 'app.raindrop.io',
-			date: 'May 1',
-			icon: '/placeholder.svg?height=32&width=32'
-		},
-		{
-			title: 'Facebook - log in or sign up',
-			url: 'facebook.com',
-			date: 'Sep 15',
-			icon: '/placeholder.svg?height=32&width=32',
-			tags: ['learn']
-		},
-		{
-			title: 'hello',
-			url: 'hello',
-			date: 'Sep 15'
-		},
-		{
-			title: 'PureCode AI - Generate UI Using AI',
-			url: 'purecode.ai',
-			date: '10:23 PM'
-		}
-	];
-
-	let selectedBookmark = bookmarks[1];
-	let collections = [
-		'All bookmarks',
-		'Unsorted',
-		'go',
-		'dsada',
-		'Shoop',
-		'Behavior Questions',
-		'react',
-		'ui',
-		'e',
-		'hello1',
-		'hello'
-	];
-	let tags = ['interview', 'learn'];
-
-	function formatDate(date: string) {
-		return new Date(date).toLocaleString('en-US', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: 'numeric'
-		});
-	}
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	$: closeUrl = $page.url.pathname.split('/item')[0];
 </script>
 
-<aside class="flex w-full min-w-0 flex-1 flex-col overflow-hidden bg-neutral-900">
+<aside
+	class="flex w-full min-w-[450px] flex-1 shrink-0 flex-col overflow-hidden border border-l border-border bg-bg"
+>
 	<div
 		class="sticky top-0 z-[4] flex flex-shrink-0 justify-between whitespace-nowrap px-4 py-2 shadow-xl backdrop-blur-md"
 	>
 		<div>
-			<Button variant="ghost" size="sm" class="rounded-lg">
+			<Button
+				variant="ghost"
+				size="sm"
+				class="rounded-lg"
+				on:click={async () => await goto(`${closeUrl}`)}
+			>
 				<span class="sr-only">close</span>
 				<X class="h-5 w-5" />
 			</Button>

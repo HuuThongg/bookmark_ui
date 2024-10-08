@@ -16,7 +16,7 @@
 	import TrashUi from './sidebar-ui/trashUI.svelte';
 	import AllCollection from './sidebar-ui/AllCollection.svelte';
 
-	export let defaultLayout = [65, 240, 655];
+	export let defaultLayout = [65];
 	export let defaultCollapsed = false;
 	export let navCollapsedSize: number = 100;
 
@@ -24,17 +24,15 @@
 
 	function onLayoutChange(sizes: number[]) {
 		console.log('onLayoutChange');
-		document.cookie = `PaneForge:layout=${JSON.stringify(sizes)}`;
+		document.cookie = `PaneForge:layout=${JSON.stringify(sizes)}; path=/`;
 	}
 
 	function onCollapse() {
-		console.log('onCollapse');
 		isCollapsed = true;
 		document.cookie = `PaneForge:collapsed=${true}`;
 	}
 
 	function onExpand() {
-		console.log('onExpand');
 		isCollapsed = false;
 		document.cookie = `PaneForge:collapsed=${false}`;
 	}
@@ -42,38 +40,38 @@
 	let bookmarks = [
 		{ title: 'All bookmarks', count: 8 },
 		{ title: 'Unsorted', count: 1 }
-		// ... other bookmarks
 	];
 
 	let filters = [
 		{ title: 'Favorites', count: 1 },
 		{ title: 'Notes', count: 3 }
-		// ... other filters
 	];
-	let showForm = false;
 
 	function toggleCreateFolderUI() {
 		isOpenCreatedFolderComponent.set(!$isOpenCreatedFolderComponent);
 	}
 </script>
 
-<div class=" flex h-screen w-full flex-row overflow-hidden">
-	<Resizable.PaneGroup direction="horizontal" {onLayoutChange} class="flex h-full  items-stretch">
+<div class=" flex h-screen w-full flex-row overflow-hidden bg-bg">
+	<Resizable.PaneGroup direction="horizontal" {onLayoutChange} class="flex h-full  items-stretch ">
 		<Resizable.Pane
 			defaultSize={defaultLayout[0]}
 			collapsedSize={navCollapsedSize}
 			collapsible
-			minSize={10}
-			maxSize={14}
+			minSize={12}
+			maxSize={40}
 			{onCollapse}
 			{onExpand}
-			style="width: {isCollapsed ? '0' : ''}; flex-grow: {isCollapsed && 0};"
+			class="md:max-w-[400px]"
+			style="width: {isCollapsed ? '0' : ''}; flex-grow: {isCollapsed && 0}; min-width: {isCollapsed
+				? 'auto'
+				: '200px'};"
 		>
-			<aside class={cn('  flex h-full w-full flex-col ')}>
-				<div class="mt-3 flex w-full justify-between px-4 py-1">
+			<aside class={cn('  flex h-full w-full  flex-col bg-sidebar-bg')}>
+				<div class="mt-3 flex w-full justify-between px-2 py-1">
 					<DropdownMenu.Root>
 						<DropdownMenu.Trigger asChild let:builder>
-							<Button builders={[builder]} variant="secondary">
+							<Button builders={[builder]} variant="ghost" class="pl-2">
 								<Avatar.Root class="size-6">
 									<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
 									<Avatar.Fallback>CN</Avatar.Fallback>
@@ -91,19 +89,24 @@
 							>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
-					<Button variant="ghost" size="sm" class="rounded-lg" on:click={toggleCreateFolderUI}>
+					<Button
+						variant="ghost"
+						size="sm"
+						class=" rounded-lg px-2"
+						on:click={toggleCreateFolderUI}
+					>
 						<span class="sr-only">Create a collection</span>
 						<Plus class="h-5 w-5" />
 					</Button>
 				</div>
-				<div>
+				<div class="flex h-full flex-col space-y-2 overflow-y-scroll">
 					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
 						<CreateFolderUI />
 					{/if}
 					<AllCollection />
 					<TrashUi />
 					<I />
-					<div class="mt-2 w-full px-5">
+					<div class="  w-full justify-self-end px-5">
 						<ul>
 							{#each bookmarks as bookmark}
 								<li>
@@ -127,7 +130,7 @@
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
 		<!-- <slot /> -->
-		<Resizable.Pane defaultSize={defaultLayout[1]} minSize={15}>
+		<Resizable.Pane>
 			<slot />
 		</Resizable.Pane>
 	</Resizable.PaneGroup>

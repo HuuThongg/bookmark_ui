@@ -32,17 +32,17 @@
 </script>
 
 <DropdownMenu>
-	<DropdownMenuTrigger>
-		<Button variant="ghost" size="sm" class="text-gray-400">
-			<LayoutList class="mr-2 h-4 w-4" /> List
+	<DropdownMenuTrigger asChild let:builder>
+		<Button builders={[builder]} variant="ghost" size="sm" class="text-primary-text">
+			<LayoutList class="mr-2 size-5" /> List
 		</Button>
 	</DropdownMenuTrigger>
-	<DropdownMenuContent class="w-56 bg-neutral-900 text-white">
+	<DropdownMenuContent class="z-[1] w-56 border-border bg-bg text-color">
 		<DropdownMenuLabel>View</DropdownMenuLabel>
 		<DropdownMenuSeparator />
 		<DropdownMenuGroup>
 			{#each ['List', 'Cards', 'Headlines', 'Moodboard'] as type}
-				<DropdownMenuItem on:click={() => (viewType = type)}>
+				<DropdownMenuItem on:click={() => (viewType = type)} class="cursor-pointer">
 					{#if viewType === type}
 						<Check class="mr-2 h-4 w-4" />
 					{/if}
@@ -54,8 +54,12 @@
 		<DropdownMenuLabel>Show in list</DropdownMenuLabel>
 		<DropdownMenuGroup>
 			{#each showInList as item, index}
-				<DropdownMenuItem class=" hover:text-neutral-600" on:click={(e) => e.preventDefault()}>
-					<Checkbox bind:checked={item.checked} on:click={() => toggleItem(index)}></Checkbox>
+				<DropdownMenuItem class="cursor-pointer" on:click={(e) => e.preventDefault()}>
+					<Checkbox
+						class="mr-2 focus-visible:bg-transparent"
+						bind:checked={item.checked}
+						on:click={() => toggleItem(index)}
+					></Checkbox>
 					{item.label}
 				</DropdownMenuItem>
 			{/each}

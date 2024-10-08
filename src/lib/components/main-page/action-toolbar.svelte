@@ -56,11 +56,11 @@
 </script>
 
 {#if $selectedLinksMode}
-	<div class="flex space-x-2 rounded-md bg-gray-800">
+	<div class="flex gap-x-1 rounded-md">
 		<Dialog bind:open={moveDialogOpen}>
-			<DialogTrigger>
-				<Button variant="ghost" class="text-white">
-					<Folder class="mr-2 h-4 w-4" />
+			<DialogTrigger asChild let:builder>
+				<Button builders={[builder]} variant="ghost" class="p-2 text-primary-text">
+					<Folder class="mr-2 size-4" />
 					Move
 				</Button>
 			</DialogTrigger>
@@ -74,7 +74,7 @@
 
 		<Dialog bind:open={addTagsDialogOpen}>
 			<DialogTrigger>
-				<Button variant="ghost" class="text-white">
+				<Button variant="ghost" class="p-2 text-primary-text">
 					<Hash class="mr-2 h-4 w-4" />
 					Add tags
 				</Button>
@@ -88,8 +88,8 @@
 		</Dialog>
 		<Dialog bind:open={deleteDialogOpen}>
 			<DialogTrigger>
-				<Button variant="ghost" size="sm" class="text-white" on:click={handleDelete}>
-					<Trash class="mr-2 h-4 w-4" />
+				<Button variant="ghost" size="sm" class="p-2 text-primary-text" on:click={handleDelete}>
+					<Trash class="mr-2 size-4" />
 					Delete
 				</Button>
 			</DialogTrigger>
@@ -101,33 +101,28 @@
 			</DialogContent>
 		</Dialog>
 
-		<Button variant="ghost" size="sm" class="text-white" disabled>
-			<Download class="mr-2 h-4 w-4" />
-			Export
-		</Button>
-
-		<Button variant="ghost" size="sm" class="bg-gray-700 text-white" on:click={handleOpen}>
-			<ExternalLink class="mr-2 h-4 w-4" />
+		<Button variant="ghost" size="sm" class="p-2 text-primary-text" on:click={handleOpen}>
+			<ExternalLink class="mr-2 size-4" />
 			Open
 		</Button>
 
 		<DropdownMenu>
-			<DropdownMenuTrigger>
-				<Button variant="ghost" size="sm" class="text-white">
-					<MoreHorizontal class="h-4 w-4" />
+			<DropdownMenuTrigger asChild let:builder>
+				<Button builders={[builder]} variant="ghost" size="sm" class="p-2 text-primary-text">
+					<MoreHorizontal class="size-4" />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuItem on:click={addToFavorites}>
-					<Star class="mr-2 h-4 w-4" />
+					<Star class="mr-2 size-4" />
 					Add to Favorites
 				</DropdownMenuItem>
 				<DropdownMenuItem on:click={removeFromFavorites}>
-					<StarOff class="mr-2 h-4 w-4" />
+					<StarOff class="mr-2 size-4" />
 					Remove from Favorites
 				</DropdownMenuItem>
 				<DropdownMenuItem on:click={deleteTags}>
-					<Trash class="mr-2 h-4 w-4" />
+					<Trash class="mr-2 size-4 " />
 					Delete Tags
 				</DropdownMenuItem>
 			</DropdownMenuContent>

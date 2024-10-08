@@ -16,6 +16,10 @@
 	import { editedLink } from '$lib/stores/link.store';
 	import { changeLinkTitle } from '$lib/api/link/changeLinkTitle';
 	import { changeLinkURL } from '$lib/api/link/changeLinkURL';
+	import I from '../collection/i.svelte';
+	import { moveLinksToTrash } from '$lib/api/link/moveLinksToTrash';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let isDialogOpen = false;
 	$: link = $editedLink;
@@ -62,6 +66,7 @@
 	}
 	const tagOptions = ['AI', 'UI', 'Design', 'Code'];
 
+	$: backToCollectionURL = $page.url.pathname.split('/item')[0];
 	function handleSave() {
 		//console.log('Saving note:', { note, collection, tags, url });
 		isDialogOpen = false;
@@ -96,18 +101,31 @@
 			await changeLinkURL(link.link_id, URL);
 		}
 	}
+
+	async function handleDelte() {
+		if (!link.link_id) return;
+		await moveLinksToTrash([link.link_id]);
+		await goto(backToCollectionURL);
+	}
 </script>
 
-<Card.Root class="w-full">
+<Card.Root class="w-full border-0 bg-transparent">
 	<Card.Content class="w-full">
-		<div class="grid gap-2">
-			<Label for="title">Title</Label>
-			<Input
-				id="title"
-				bind:value={title}
-				on:blur={handleUpdateTitle}
-				placeholder="https://example.com"
-			/>
+		<div class="flex">
+			<div class="w-full max-w-20">
+				<img class="h-auto w-full" src={link.link_thumbnail} alt={`Image of ${link.link_title}`} />
+			</div>
+			<div class="grid flex-1 gap-2">
+				<Label for="title" class="sr-only">Title</Label>
+
+				<textarea
+					id="title"
+					bind:value={title}
+					on:blur={handleUpdateTitle}
+					placeholder="https://example.com"
+					class="border-0 bg-transparent pl-4 text-base font-medium text-color focus-visible:outline-0"
+				/>
+			</div>
 		</div>
 
 		<div class="grid gap-4 py-4">
@@ -129,6 +147,7 @@
 							This action cannot be undone. This will permanently delete your account and remove
 							your data from our servers.
 						</Dialog.Description>
+						<I />
 					</Dialog.Header>
 				</Dialog.Content>
 			</Dialog.Root>
@@ -153,6 +172,8 @@
 				</Button>
 			</div>
 			<Button on:click={handleSave}>Save Note</Button>
+
+			<Button variant="outline" on:click={handleDelte}>Delete</Button>
 		</div>
 	</Card.Content>
 </Card.Root>

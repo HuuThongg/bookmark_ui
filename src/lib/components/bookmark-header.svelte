@@ -8,7 +8,7 @@
 	import { zod } from 'sveltekit-superforms/adapters';
 	import * as Dialog from '$lib/components/ui/dialog';
 
-	import { urlSchema, type UrlSchema } from '$lib/schemas';
+	import { urlSchema } from '$lib/schemas';
 	import { searchInputFocused } from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 	import LoadingSpinner from './shared-components/loading-spinner.svelte';
@@ -80,12 +80,12 @@
 	}
 </script>
 
-<div class="mb-4 flex items-center">
+<div class="m-1 mx-2 flex items-center">
 	<div class="relative flex-grow">
 		<form on:submit|preventDefault|stopPropagation={handleSearchFormSubmit}>
-			<Search class="absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-400" />
+			<Search class="absolute left-2 top-1/2 -translate-y-1/2 transform text-primary-text" />
 			<Input
-				class="border-gray-700 bg-gray-800 pl-8 text-gray-100"
+				class=" pl-10 "
 				type="search"
 				name="search"
 				id="search"
@@ -98,15 +98,15 @@
 			/>
 		</form>
 
-		{#if $query !== ''}
+		{#if $query === 'x'}
 			<div class="clear">
 				<X on:click={handleClearSearch} on:keyup />
 			</div>
 		{/if}
 	</div>
 	<Dialog.Root>
-		<Dialog.Trigger>
-			<Button variant="outline" class="ml-2 border-gray-700 bg-gray-800 text-gray-100">
+		<Dialog.Trigger asChild let:builder>
+			<Button builders={[builder]} variant="outline" class="ml-2 border-0 ">
 				<Share class="mr-2 h-4 w-4" /> Share
 			</Button>
 		</Dialog.Trigger>
@@ -122,9 +122,9 @@
 	</Dialog.Root>
 
 	<Popover.Root>
-		<Popover.Trigger class="">
-			<Button variant="ghost" class="ml-2 border-gray-700 bg-gray-800 text-gray-100">
-				<Plus class="mr-2 h-4 w-4" /> Add
+		<Popover.Trigger asChild let:builder>
+			<Button builders={[builder]} variant="default" class="ml-2 text-base font-semibold">
+				<Plus class="mr-2 size-5" /> Add
 			</Button>
 		</Popover.Trigger>
 

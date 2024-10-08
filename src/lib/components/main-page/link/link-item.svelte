@@ -22,6 +22,7 @@
 	import { cn, copyToClipboard } from '$lib/utils';
 	import { goto } from '$app/navigation';
 	import { moveLinksToTrash } from '$lib/api/link/moveLinksToTrash';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	export let link: Link;
 	export let currentOpenMenu: string | null;
@@ -29,10 +30,8 @@
 
 	$: checked = $checkboxLinkStore[link.link_id] ?? false;
 
-	$: console.log('checked', checked);
 	$: linkIdsSelected = $selectedLinkIdsToEdit;
 	$: isEdited = linkIdsSelected.findIndex((l) => l === link.link_id) !== -1;
-	$: console.log('isEdited', isEdited);
 	const unsubscribe = loadingStatesStore.subscribe((value) => {
 		loadingStates = value;
 	});
@@ -69,22 +68,22 @@
 		<a
 			href={`/app/${folderIDslug}/item/${link.link_id}/edit`}
 			class={cn(
-				'group/item relative flex items-center justify-between rounded-lg bg-gray-800 p-3 hover:bg-gray-700 ',
-				{ 'bg-red-400': isEdited }
+				'group/item relative flex items-center justify-between rounded-lg bg-transparent p-3 hover:bg-hover-bg ',
+				{ 'bg-accent-color/30': isEdited }
 			)}
 		>
 			<div class="flex items-center space-x-3">
-				<img src={link.link_thumbnail} alt="" class="h-10 w-10 rounded" />
+				<img src={link.link_thumbnail} alt="" class="h-12 w-14 rounded" />
 				<div>
-					<h3 class="font-medium">{link.link_title}</h3>
-					<p class="text-sm text-gray-400">
+					<h3 class="font-medium text-color">{link.link_title}</h3>
+					<p class="text-sm text-secondary-text">
 						{link.link_hostname} ·
 						{dayjs(link.added_at).format('MMM D')}
 					</p>
 				</div>
 			</div>
 			{#if checked}
-				<div class="box">This is a selected box</div>
+				<div class="box">+</div>
 			{/if}
 			<label
 				class={`absolute left-2 top-1 z-[1] cursor-pointer ${isEdited ? 'visible ' : 'invisible group-hover/item:visible'}`}
@@ -99,17 +98,25 @@
 			</label>
 			<div class="invisible absolute right-2 top-2 z-[1] group-hover/item:visible">
 				<div class=" flex items-center space-x-2" style="">
-					<Button variant="ghost" size="sm" class=" bg-zinc-600 text-gray-400">
+					<Button
+						variant="ghost"
+						size="sm"
+						class="border bg-accent-foreground hover:border-accent-color  hover:bg-accent-foreground focus-visible:bg-accent-foreground"
+					>
 						<Eye class="h-4 w-4" />
 					</Button>
-					<Button variant="ghost" size="sm" class="bg-zinc-600 text-gray-400 ">
+					<Button
+						variant="ghost"
+						size="sm"
+						class="border bg-accent-foreground hover:border-accent-color  hover:bg-accent-foreground focus-visible:bg-accent-foreground"
+					>
 						<Pencil class="h-4 w-4" />
 					</Button>
 					<Button
 						variant="ghost"
 						size="sm"
-						class="bg-zinc-600 text-gray-400 "
-						on:click={async () => await moveLinksToTrash([link])}
+						class="border bg-accent-foreground hover:border-accent-color  hover:bg-accent-foreground focus-visible:bg-accent-foreground"
+						on:click={async () => await moveLinksToTrash([link.link_id])}
 						aria-disabled={loadingStates[link.link_id]}
 					>
 						{#if loadingStates[link.link_id]}
@@ -121,6 +128,7 @@
 				</div>
 			</div>
 		</a>
+		<Separator class="my-1" />
 	</ContextMenu.Trigger>
 	{#if currentOpenMenu === link.link_id}
 		<ContextMenu.Content class="flex flex-col">
@@ -170,7 +178,7 @@
 			</ContextMenu.Item>
 
 			<ContextMenu.Item
-				on:click={async () => await moveLinksToTrash([link])}
+				on:click={async () => await moveLinksToTrash([link.link_id])}
 				class={cn('cursor-pointer', buttonClass)}
 			>
 				<div class="flex items-center">

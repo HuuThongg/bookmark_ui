@@ -19,6 +19,7 @@ export const load: LayoutLoad = async ({ fetch }) => {
 
   if (layoutCookie) layout = JSON.parse(layoutCookie);
   if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
+  console.log("layout", layout)
 
   return { layout, collapsed };
 };

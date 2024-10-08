@@ -12,6 +12,7 @@
 	import { initInput } from '$lib/actions/focus';
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
+	import { Plus } from 'lucide-svelte';
 	$: form = superForm(defaults(zod(folderSchema)), {
 		SPA: true,
 		validators: zod(folderSchema),
@@ -20,7 +21,6 @@
 				try {
 					await CreateFolder(form.data.folderName, $sidebarSelectedFolderId);
 					isOpenCreatedFolderComponent.set(false);
-					//toast.success('create');
 				} catch (error) {
 					toast.error('Error connecting to the server!');
 				}
@@ -34,17 +34,19 @@
 
 <form method="post" use:enhance class="flex w-full">
 	<div class=" flex w-full items-center px-0">
-		<Form.Field {form} name="folderName" class="relative w-full space-y-0">
+		<Form.Field
+			{form}
+			name="folderName"
+			class="relative flex w-full flex-row space-y-0 bg-active-bg"
+		>
 			<Form.Control let:attrs>
 				<Form.Label class="sr-only">Folder Name</Form.Label>
+				<Plus class="ml-3" />
 				<input
-					class={cn(
-						'mt-0 h-auto focus-within:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
-						inputClass
-					)}
+					class={cn('mt-0 h-auto w-full bg-active-bg focus-visible:outline-0')}
 					{...attrs}
 					bind:value={$formData.folderName}
-					placeholder="Type your collection"
+					placeholder=""
 					use:initInput
 				/>
 				{#if $submitting}
