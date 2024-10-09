@@ -1,5 +1,6 @@
 import { authenticate } from '$lib/api/auth';
 import { getAllFolders } from '$lib/api/folder/getAllFolders';
+import { getSortedFolders } from '$lib/api/folder/getSortedFolders';
 import { folders } from '$lib/stores/folder.store';
 import { getCookie } from '$lib/utils';
 import type { LayoutLoad } from './$types';
@@ -8,6 +9,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
   console.log('app layout.ts');
   await authenticate({ admin: true });
   const foldersList = await getAllFolders(fetch);
+  const sortedFolders = await getSortedFolders(fetch)
+  console.log("sortedFolders", sortedFolders)
 
   if (foldersList) {
     folders.set(foldersList);

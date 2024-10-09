@@ -1,3 +1,4 @@
+import { getCookie } from '$lib/utils';
 import { writable, derived } from 'svelte/store';
 export const searching = writable<boolean>(false)
 export const isDeleting = writable<boolean>(false);

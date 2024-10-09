@@ -9,7 +9,7 @@
 	import I from '$lib/components/collection/i.svelte';
 	import { handleLogout } from '$lib/api/auth';
 	import { AppRoute } from '$lib/constants';
-	import { cn } from '$lib/utils';
+	import { cn, getCookie } from '$lib/utils';
 	import { Plus } from 'lucide-svelte';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
@@ -24,19 +24,29 @@
 
 	function onLayoutChange(sizes: number[]) {
 		console.log('onLayoutChange');
-		document.cookie = `PaneForge:layout=${JSON.stringify(sizes)}; path=/`;
+		document.cookie = `PaneForge:layout=${JSON.stringify(sizes)}; path=/app`;
 	}
 
 	function onCollapse() {
 		isCollapsed = true;
-		document.cookie = `PaneForge:collapsed=${true}; path=/`;
+		setCollapsedCookie(isCollapsed);
 	}
 
 	function onExpand() {
 		isCollapsed = false;
-		document.cookie = `PaneForge:collapsed=${false}; path=/`;
+		setCollapsedCookie(isCollapsed);
 	}
 
+	function setCollapsedCookie(value: boolean) {
+		document.cookie = `PaneForge:collapsed=${value}; path=/app;`;
+		window.dispatchEvent(new Event('collapsedCookieChanged'));
+	}
+	window.addEventListener('collapsedCookieChanged', () => {
+		const newCollapsedCookie = getCookie('PaneForge:collapsed');
+		if (newCollapsedCookie) {
+			isCollapsed = JSON.parse(newCollapsedCookie);
+		}
+	});
 	let bookmarks = [
 		{ title: 'All bookmarks', count: 8 },
 		{ title: 'Unsorted', count: 1 }

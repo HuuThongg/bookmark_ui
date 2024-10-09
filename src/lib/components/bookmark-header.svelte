@@ -2,7 +2,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Popover from '$lib/components/ui/popover/index';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { Search, Plus, Share, X } from 'lucide-svelte';
+	import { Search, Plus, Share, X, AlignLeft } from 'lucide-svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
@@ -20,6 +20,8 @@
 	import { searchLinksAndFolders } from '$lib/api/searchLinkAndFolder';
 	import { debounce } from '@melt-ui/svelte/internal/helpers';
 	import { linksFound } from '$lib/stores/link.store';
+	import { cn, getCookie } from '$lib/utils';
+	import { page } from '$app/stores';
 	const folerID_Name = get(currentFolderAtSlug);
 	$: form = superForm(defaults(zod(urlSchema)), {
 		SPA: true,
@@ -82,9 +84,29 @@
 
 		input.focus();
 	}
+	let isShowSidebarToggle = false;
+
+	$: isIconNameHidden = $page.url.pathname.includes('/item');
+	window.addEventListener('collapsedCookieChanged', () => {
+		const newCollapsedCookie = getCookie('PaneForge:collapsed');
+		if (newCollapsedCookie) {
+			isShowSidebarToggle = JSON.parse(newCollapsedCookie);
+		}
+	});
+	function openSideBar() {
+		document.cookie = `PaneForge:collapsed=false; path=/app;`;
+		window.dispatchEvent(new Event('collapsedCookieChanged'));
+	}
 </script>
 
 <div class="m-1 mx-2 flex items-center">
+	<Button
+		on:click={openSideBar}
+		class={cn('-ml-2 mr-1 p-2', isShowSidebarToggle ? 'block' : 'hidden')}
+		variant="ghost"
+	>
+		<AlignLeft class="size-5" />
+	</Button>
 	<div class="relative flex-grow">
 		<form on:submit|preventDefault|stopPropagation={handleSearchFormSubmit}>
 			<Search class="absolute left-2 top-1/2 -translate-y-1/2 transform text-primary-text" />
@@ -111,7 +133,8 @@
 	<Dialog.Root>
 		<Dialog.Trigger asChild let:builder>
 			<Button builders={[builder]} variant="outline" class="ml-2 border-0 ">
-				<Share class="mr-2 h-4 w-4" /> Share
+				<Share class=" size-4" />
+				<span class={isIconNameHidden ? 'hidden' : 'ml-3 block'}>Share</span>
 			</Button>
 		</Dialog.Trigger>
 		<Dialog.Content>
@@ -128,7 +151,9 @@
 	<Popover.Root>
 		<Popover.Trigger asChild let:builder>
 			<Button builders={[builder]} variant="default" class="ml-2 text-base font-semibold">
-				<Plus class="mr-2 size-5" /> Add
+				<Plus class="size-5" />
+
+				<span class={isIconNameHidden ? 'hidden' : 'ml-3 block'}>Add</span>
 			</Button>
 		</Popover.Trigger>
 
