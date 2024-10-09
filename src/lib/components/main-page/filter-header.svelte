@@ -36,7 +36,7 @@
 	}
 	$: isIconNameHidden = $page.url.pathname.includes('/item');
 	beforeNavigate(() => {
-		currentFolderAtSlug.set(null);
+		//currentFolderAtSlug.set(null);
 	});
 	onDestroy(() => {
 		unsubscribe();

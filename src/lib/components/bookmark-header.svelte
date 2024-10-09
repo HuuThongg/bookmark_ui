@@ -31,7 +31,7 @@
 						toast.warning('Foldernam is empty');
 						return;
 					}
-					//const link = await addLink(form.data.url, folerID_Name.folder_id);
+					const link = await addLink(form.data.url, folerID_Name.folder_id);
 					toast.success(`Added ${form.data.url}`);
 					if (!link) return;
 					await goto(`/app/${$currentFolderAtSlug?.folder_id}/item/${link.link_id}/edit`);

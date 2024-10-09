@@ -57,12 +57,12 @@
 	<!-- Tags Input Field -->
 	<div
 		use:melt={$root}
-		class="flex min-w-[280px] flex-row flex-wrap gap-2.5 rounded-md bg-white px-3 py-2 text-magnum-700 focus-within:ring focus-within:ring-magnum-400"
+		class="flex min-w-[280px] flex-row flex-wrap gap-2.5 rounded-md bg-bg-alternative px-3 py-2 text-primary-text focus-within:ring focus-within:ring-ring"
 	>
 		{#each $tags as t}
 			<div
 				use:melt={$tag(t)}
-				class="flex items-center overflow-hidden rounded-md bg-magnum-200 text-magnum-900 [word-break:break-word] data-[disabled]:bg-magnum-300 data-[selected]:bg-magnum-400 data-[disabled]:hover:cursor-default data-[disabled]:focus:!outline-none data-[disabled]:focus:!ring-0"
+				class="flex items-center overflow-hidden rounded-md bg-magnum-200 text-magnum-900 [word-break:break-word] data-[disabled]:bg-magnum-300 data-[selected]:bg-accent-color data-[disabled]:hover:cursor-default data-[disabled]:focus:!outline-none data-[disabled]:focus:!ring-0"
 			>
 				<span class="flex items-center border-r border-white/10 px-1.5">{t.value}</span>
 				<button
@@ -84,27 +84,27 @@
 			use:melt={$comboboxInput}
 			type="text"
 			placeholder="Enter tags..."
-			class="min-w-[4.5rem] shrink grow basis-0 border-0 bg-gray-500 text-white outline-none focus:!ring-0 data-[invalid]:text-red-500"
+			class="min-w-[4.5rem] shrink grow basis-0 border-0 bg-transparent text-color outline-none focus:!ring-0 data-[invalid]:text-red-500"
 		/>
 	</div>
 
 	<!-- Combobox Dropdown for Available Tags -->
-	{JSON.stringify($open)}
-	{JSON.stringify(filteredTags)}
+	<!-- {JSON.stringify($open)} -->
+	<!-- {JSON.stringify(filteredTags)} -->
 	{#if $open && filteredTags.length > 0}
 		<ul
-			class="z-10 flex max-h-[300px] flex-col overflow-hidden rounded-lg"
+			class="z-10 flex max-h-[300px] flex-col overflow-hidden rounded-lg bg-bg"
 			use:melt={$menu}
 			transition:fly={{ duration: 150, y: -5 }}
 		>
 			<div
-				class="flex max-h-full flex-col gap-0 overflow-y-auto bg-white px-2 py-2 text-black"
+				class="flex max-h-full flex-col gap-0 overflow-y-auto bg-bg px-2 py-2 text-color"
 				tabindex="0"
 			>
 				{#each filteredTags as tag, index (index)}
 					<li
 						use:melt={$option({ value: tag })}
-						class="relative cursor-pointer scroll-my-2 rounded-md py-2 pl-4 pr-4 hover:bg-magnum-100 data-[highlighted]:bg-magnum-200 data-[highlighted]:text-magnum-900"
+						class="relative cursor-pointer scroll-my-2 rounded-md py-2 pl-4 pr-4 hover:bg-magnum-100 data-[highlighted]:bg-active-bg data-[highlighted]:text-color"
 					>
 						{#if $isSelected(tag)}
 							<div class="check absolute left-2 top-1/2 z-10 text-magnum-900">
