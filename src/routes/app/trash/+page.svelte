@@ -5,5 +5,7 @@
 </script>
 
 <div class="w-full p-4">
-	<LinkList {linkList} />
+	{#if linkList?.length > 0}
+		<LinkList {linkList} />
+	{/if}
 </div>
