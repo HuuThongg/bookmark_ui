@@ -30,8 +30,6 @@ export async function createNewPasswordRequest(password: string) {
 	try {
 		const data = await response.json();
 
-		console.log(data);
-
 		if (data.message === 'password update successfully') {
 			toast.success('password update successfully');
 

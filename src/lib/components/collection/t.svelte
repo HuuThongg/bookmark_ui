@@ -20,27 +20,23 @@
 	import CreateFolderUi from '../sidebar-ui/create-folder-ui.svelte';
 	import {
 		sidebarSelectedFolderId,
-		treeStructureFlattenStore,
-		treeStructureStore
+		treeSortedStructureStore,
+		treeSortedStructureFlattenStore
 	} from '$lib/stores/folder.store';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { page } from '$app/stores';
 	import { initInput } from '$lib/actions/focus';
 	import { renameFolder } from '$lib/api/folder/renameFolder';
-	import type { Folder } from '$lib/types/folder';
-	import type { TreeItem } from '$lib/types';
-	export let treeItems: TreeItem[];
+	import type { MinimalFolder } from '$lib/types/folder';
+	import type { TreeItem1 } from '$lib/types';
+	export let treeItems: TreeItem1[];
 	export let level = 1;
-	export let isEditing: { [key: string]: boolean } = {}; // Track which folder is being edited
+	export let isEditing: { [key: string]: boolean } = {};
 	let delay = 200;
 	let timeout: number | undefined = undefined;
 	let waiting = false;
-	let clickType = '';
 	let elementInput: HTMLInputElement | null = null;
-	let folderStructure: TreeItem[] = [];
-	$: folderStructure = $treeStructureStore;
 	function changeSelectedFolderId(folderId: string) {
-		console.log('folder_id', folderId);
 		if (!($sidebarSelectedFolderId === folderId)) {
 			sidebarSelectedFolderId.set(folderId);
 		}
@@ -49,10 +45,10 @@
 		elements: { item, group },
 		helpers: { isExpanded, isSelected }
 	} = getContext<TreeView>('tree');
-	async function handleNameChange(event: Event, folderInfo: Folder) {
+	async function handleNameChange(event: Event, folderInfo: MinimalFolder) {
 		folderInfo.folder_name = (event.target as HTMLInputElement).value; // Update folder o
 	}
-	async function handleSubmit(f: Folder, itemId: string) {
+	async function handleSubmit(f: MinimalFolder, itemId: string) {
 		await renameFolder(elementInput?.value, f.folder_id);
 		isEditing[itemId] = false;
 	}
@@ -67,9 +63,9 @@
 
 {#each treeItems as { children, folderInfo }, i}
 	{@const itemId = `${folderInfo.folder_id}`}
-	{@const hasChildren = !!children?.length}
+	{@const hasChildren = !!children.length}
 
-	<li class={cn('hover:bg-hover-bg', level !== 1 ? 'pl-4' : '')}>
+	<li class={cn('hover:bg-hover-bg', level !== 1 ? 'pl-4' : '')} id={`child-${i}`}>
 		{#if isEditing[itemId]}
 			<form
 				on:submit|preventDefault={async () => handleSubmit(folderInfo, itemId)}
@@ -120,8 +116,8 @@
 							nextItem = treeItems[i + 1]; // Next sibling
 						} else {
 							//console.log('d', $treeStructureFlattenStore);
-							//let index = $treeStructureFlattenStore.findIndex((e) => e.title === folderInfo.title);
-							//nextItem = $treeStructureFlattenStore[index + 1];
+							//let index = $treeSortedStructureFlattenStore.findIndex((e) => e.title === folderInfo.title);
+							//nextItem = $treeSortedStructureFlattenStore[index + 1];
 						}
 						await goto(`/app/${nextItem.folder_id}`, { keepFocus: true });
 					}

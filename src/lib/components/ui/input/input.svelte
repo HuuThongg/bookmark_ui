@@ -17,7 +17,7 @@
 
 <input
 	class={cn(
-		'bg-bg-alternative text-color placeholder:text-secondary-text focus-visible:bg-bg  flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+		'flex h-10 w-full rounded-md  border border-input bg-bg-alternative px-3 py-2 text-sm  text-color ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary-text focus-visible:bg-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
 		className
 	)}
 	bind:value

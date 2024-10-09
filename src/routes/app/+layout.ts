@@ -6,23 +6,20 @@ import { getCookie } from '$lib/utils';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch }) => {
-  console.log('app layout.ts');
-  await authenticate({ admin: true });
-  const foldersList = await getAllFolders(fetch);
-  const sortedFolders = await getSortedFolders(fetch)
-  console.log("sortedFolders", sortedFolders)
+	await authenticate({ admin: true });
+	const foldersList = await getAllFolders(fetch);
+	await getSortedFolders(fetch);
 
-  if (foldersList) {
-    folders.set(foldersList);
-  }
-  let layout: number[] | undefined;
-  let collapsed: boolean | undefined;
-  const layoutCookie = getCookie('PaneForge:layout');
-  const collapsedCookie = getCookie('PaneForge:collapsed');
+	if (foldersList) {
+		folders.set(foldersList);
+	}
+	let layout: number[] | undefined;
+	let collapsed: boolean | undefined;
+	const layoutCookie = getCookie('PaneForge:layout');
+	const collapsedCookie = getCookie('PaneForge:collapsed');
 
-  if (layoutCookie) layout = JSON.parse(layoutCookie);
-  if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
-  console.log("layout", layout)
+	if (layoutCookie) layout = JSON.parse(layoutCookie);
+	if (collapsedCookie) collapsed = JSON.parse(collapsedCookie);
 
-  return { layout, collapsed };
+	return { layout, collapsed };
 };

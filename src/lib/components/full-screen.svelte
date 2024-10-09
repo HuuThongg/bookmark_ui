@@ -2,7 +2,6 @@
 	import * as Resizable from '$lib/components/ui/resizable';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { onMount } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import { user } from '$lib/stores/user.store';
 	import CreateFolderUI from '$lib/components/sidebar-ui/create-folder-ui.svelte';
@@ -15,15 +14,15 @@
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 	import TrashUi from './sidebar-ui/trashUI.svelte';
 	import AllCollection from './sidebar-ui/AllCollection.svelte';
+	import { getTagStats } from '$lib/api/link/getTagStats';
 
 	export let defaultLayout = [65];
 	export let defaultCollapsed = false;
 	export let navCollapsedSize: number = 100;
 
 	let isCollapsed = defaultCollapsed;
-
+	let tagStatsPromise = getTagStats();
 	function onLayoutChange(sizes: number[]) {
-		console.log('onLayoutChange');
 		document.cookie = `PaneForge:layout=${JSON.stringify(sizes)}; path=/app`;
 	}
 
@@ -116,30 +115,34 @@
 					<AllCollection />
 					<TrashUi />
 					<I />
-					<div class="  w-full justify-self-end px-5">
-						<ul>
-							{#each bookmarks as bookmark}
-								<li>
-									<span>{bookmark.title}</span>
-									<span>{bookmark.count}</span>
-								</li>
-							{/each}
-						</ul>
-
-						<ul>
-							{#each filters as filter}
-								<li>
-									<span>{filter.title}</span>
-									<span>{filter.count}</span>
-								</li>
-							{/each}
+					<div class=" w-full justify-self-end">
+						<ul class="font-sans font-light text-color">
+							{#if tagStatsPromise}
+								{#await tagStatsPromise}
+									<p>...waiting</p>
+								{:then tags}
+									<h4 class="px-5 py-1 text-sm text-secondary-text">Tags {tags.length}</h4>
+									{#each tags as tag}
+										<div
+											class="flex cursor-pointer items-center justify-between rounded px-5 py-0 text-sm hover:bg-hover-bg"
+										>
+											<div class="flex items-center">
+												<span class="mr-2 text-lg">#</span>
+												<span>{tag.tag_name}</span>
+											</div>
+											<span>{tag.amount}</span>
+										</div>
+									{/each}
+								{:catch error}
+									<p style="color: red">{error.message}</p>
+								{/await}
+							{/if}
 						</ul>
 					</div>
 				</div>
 			</aside>
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
-		<!-- <slot /> -->
 		<Resizable.Pane>
 			<slot />
 		</Resizable.Pane>

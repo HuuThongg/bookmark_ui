@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="bg-bg relative flex max-h-screen min-h-screen flex-col"
+	class="relative flex max-h-screen min-h-screen flex-col bg-bg"
 	id="page"
 	data-vaul-drawer-wrapper
 >
@@ -26,7 +26,7 @@
 		<Button variant="secondary" class="">secondary Button</Button>
 		<Button
 			variant="outline"
-			class="text-color bg-bg hover:bg-hover-bg hover:text-primary-text  border border-input"
+			class="border border-input bg-bg text-color  hover:bg-hover-bg hover:text-primary-text"
 			>secondary Button</Button
 		>
 	</div>

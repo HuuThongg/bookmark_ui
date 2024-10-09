@@ -68,12 +68,12 @@
 		<a
 			href={`/app/${folderIDslug}/item/${link.link_id}/edit`}
 			class={cn(
-				'group/item relative flex items-center justify-between rounded-lg bg-transparent p-3 hover:bg-hover-bg ',
+				'group/item relative flex select-none items-center justify-between rounded-lg bg-transparent p-3 hover:bg-hover-bg ',
 				{ 'bg-accent-color/30': isEdited }
 			)}
 		>
 			<div class="flex items-center space-x-3">
-				<img src={link.link_thumbnail} alt="" class="h-12 w-14 rounded" />
+				<img src={link.link_thumbnail} alt="" class="h-12 w-14 rounded" draggable="false" />
 				<div>
 					<h3 class="font-medium text-color">{link.link_title}</h3>
 					<p class="text-sm text-secondary-text">

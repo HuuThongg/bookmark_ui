@@ -1,13 +1,11 @@
-import type { Link } from '$lib/types/link';
 import { getSession } from '$lib/stores/user.store';
 import { PUBLIC_API_ENDPOINT } from '$env/static/public';
-import { editedLink } from '$lib/stores/link.store';
 import { toast } from 'svelte-sonner';
 import { goto } from '$app/navigation';
 import { AppRoute } from '$lib/constants';
 import type { Fetch } from '$lib/types';
 
-export async function getSingleLink(fetch: Fetch, link_id: string): Promise<Link[] | undefined> {
+export async function getTagStats() {
 	const s = getSession();
 	if (!s || (s && !s.access_token)) {
 		toast.error('session is timeout');
@@ -16,7 +14,7 @@ export async function getSingleLink(fetch: Fetch, link_id: string): Promise<Link
 	}
 
 	try {
-		let url = `${PUBLIC_API_ENDPOINT}/private/link/${link_id}`;
+		let url = `${PUBLIC_API_ENDPOINT}/private/tag/stats`;
 		const res = await fetch(url, {
 			method: 'GET',
 			mode: 'cors',
@@ -31,9 +29,10 @@ export async function getSingleLink(fetch: Fetch, link_id: string): Promise<Link
 		}
 
 		const result = await res.json();
-		const link = result[0];
-		editedLink.set(link);
-		return link;
+		const re = result[0];
+		if (re.result) {
+			return re.tags;
+		}
 	} catch (error) {
 		console.error(error);
 		throw new Error('Error: get a link');

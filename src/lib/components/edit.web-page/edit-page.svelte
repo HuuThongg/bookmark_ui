@@ -20,7 +20,7 @@
 	import { moveLinksToTrash } from '$lib/api/link/moveLinksToTrash';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-
+	export let tagsList;
 	let isDialogOpen = false;
 	$: link = $editedLink;
 	$: orignalNote = $editedLink.link_notes ?? '';
@@ -30,6 +30,7 @@
 
 	$: oldURL = $editedLink.link_url ?? 'https://example.com';
 	$: URL = oldURL;
+
 	const frameworks = [
 		{
 			value: 'sveltekit',
@@ -151,7 +152,9 @@
 					</Dialog.Header>
 				</Dialog.Content>
 			</Dialog.Root>
-			<TagInput />
+			{#key tagsList}
+				<TagInput {tagsList} />
+			{/key}
 			<div class="grid gap-2">
 				<Label for="url">URL</Label>
 				<Input

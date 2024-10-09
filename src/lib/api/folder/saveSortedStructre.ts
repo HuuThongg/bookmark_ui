@@ -5,9 +5,9 @@ import { editedLink } from '$lib/stores/link.store';
 import { toast } from 'svelte-sonner';
 import { goto } from '$app/navigation';
 import { AppRoute } from '$lib/constants';
-import type { Fetch } from '$lib/types';
+import type { TreeItem1 } from '$lib/types';
 
-export async function getSingleLink(fetch: Fetch, link_id: string): Promise<Link[] | undefined> {
+export async function saveFolderSort(newSortedArray: TreeItem1[]) {
 	const s = getSession();
 	if (!s || (s && !s.access_token)) {
 		toast.error('session is timeout');
@@ -16,24 +16,33 @@ export async function getSingleLink(fetch: Fetch, link_id: string): Promise<Link
 	}
 
 	try {
-		let url = `${PUBLIC_API_ENDPOINT}/private/link/${link_id}`;
+		let url = `${PUBLIC_API_ENDPOINT}/private/folder/updateOrder`;
 		const res = await fetch(url, {
-			method: 'GET',
+			method: 'PATCH',
 			mode: 'cors',
 			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 				authorization: `Bearer ${s.access_token}`
-			}
+			},
+
+			body: JSON.stringify({
+				folders: newSortedArray.map((minimalFolder) => {
+					return {
+						folder_id: minimalFolder.folderInfo.folder_id,
+						folder_order: minimalFolder.folderInfo.folder_order,
+						subfolder_of: minimalFolder.folderInfo.subfolder_of
+					};
+				})
+			})
 		});
 		if (!res.ok) {
-			throw new Error('Can get links');
+			throw new Error('Cannot update folder order');
 		}
 
 		const result = await res.json();
-		const link = result[0];
-		editedLink.set(link);
-		return link;
+		const a = result[0];
+		console.log('update folder order', a);
 	} catch (error) {
 		console.error(error);
 		throw new Error('Error: get a link');

@@ -4,7 +4,9 @@
 	import { ExternalLink, Maximize2, X } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	export let data;
 	$: closeUrl = $page.url.pathname.split('/item')[0];
+	$: console.log('data', data.tagsList);
 </script>
 
 <aside
@@ -42,7 +44,7 @@
 		<div class="mx-auto my-0 flex w-full max-w-md">
 			<form action="" class="relative w-full flex-1">
 				<div class="grid grid-rows-[auto_1fr] items-center gap-2 p-4"></div>
-				<EditPage />
+				<EditPage tagsList={data.tagsList} />
 			</form>
 		</div>
 	</div>

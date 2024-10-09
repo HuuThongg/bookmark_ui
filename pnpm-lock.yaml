@@ -79,6 +79,9 @@ devDependencies:
   '@types/eslint':
     specifier: ^9.6.0
     version: 9.6.1
+  '@types/sortablejs':
+    specifier: ^1.15.8
+    version: 1.15.8
   autoprefixer:
     specifier: ^10.4.20
     version: 10.4.20(postcss@8.4.47)
@@ -106,6 +109,9 @@ devDependencies:
   prettier-plugin-tailwindcss:
     specifier: ^0.6.5
     version: 0.6.8(prettier-plugin-svelte@3.2.7)(prettier@3.3.3)
+  sortablejs:
+    specifier: ^1.15.3
+    version: 1.15.3
   svelte:
     specifier: ^4.2.7
     version: 4.2.19
@@ -885,6 +891,10 @@ packages:
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  /@types/sortablejs@1.15.8:
+    resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
+    dev: true
 
   /@types/validator@13.12.2:
     resolution: {integrity: sha512-6SlHBzUW8Jhf3liqrGGXyTJSIFe4nqlJ5A5KaMZ2l/vbM3Wh3KSybots/wfWVzNLK4D1NZluDlSQIbIEPx6oyA==}
@@ -2884,6 +2894,10 @@ packages:
       '@polka/url': 1.0.0-next.28
       mrmime: 2.0.0
       totalist: 3.0.1
+
+  /sortablejs@1.15.3:
+    resolution: {integrity: sha512-zdK3/kwwAK1cJgy1rwl1YtNTbRmc8qW/+vgXf75A7NHag5of4pyI6uK86ktmQETyWRH7IGaE73uZOOBcGxgqZg==}
+    dev: true
 
   /source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
