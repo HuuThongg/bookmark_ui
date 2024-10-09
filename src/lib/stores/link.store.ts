@@ -6,7 +6,12 @@ export const allLinksLength = derived(allLinks, ($links) => $links.length)
 export const trashLinks = writable<Partial<Link>[]>([]);
 
 export const trashLinksLength = derived(
-  trashLinks, ($trashLinks) => $trashLinks.length
+  trashLinks, ($trashLinks) => {
+    if (!$trashLinks) {
+      return 0
+    }
+    return $trashLinks.length
+  }
 );
 
 export const links = writable<Link[]>([]);

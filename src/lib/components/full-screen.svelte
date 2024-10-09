@@ -99,7 +99,7 @@
 						<Plus class="h-5 w-5" />
 					</Button>
 				</div>
-				<div class="flex h-full flex-col space-y-2 overflow-y-scroll">
+				<div class="flex h-full flex-col space-y-2 overflow-y-auto">
 					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
 						<CreateFolderUI />
 					{/if}
