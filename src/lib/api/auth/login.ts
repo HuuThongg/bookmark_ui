@@ -5,30 +5,6 @@ import { setSession } from '../../stores/user.store';
 import type { Session } from '$lib/types/session';
 import { AppRoute } from '$lib/constants';
 
-//export async function login(formData: any) {
-//  const response = await fetch(`${PUBLIC_API_ENDPOINT}/public/account/signin`, {
-//    method: 'POST',
-//    mode: 'cors',
-//    cache: 'no-cache',
-//    credentials: 'include',
-//    redirect: 'follow',
-//    referrerPolicy: 'no-referrer',
-//    headers: {
-//      'Content-Type': 'application/json'
-//    },
-//    body: JSON.stringify(formData)
-//  });
-//
-//  if (!response.ok) {
-//    const error = await response.json();
-//    console.log("error json", error)
-//    throw new Error(error.message);
-//  }
-//  const data = await response.json();
-//
-//  return data[0];
-//
-//}
 
 export async function login(formData: any) {
   try {
