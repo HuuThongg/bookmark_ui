@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Button from './ui/button/button.svelte';
-
-	export let error;
 </script>
 
 <div class="m-auto">
