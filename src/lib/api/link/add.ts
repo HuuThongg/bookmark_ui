@@ -32,7 +32,9 @@ export async function addLink(url: string, folderID: string | null): Promise<Lin
   });
 
   const result = await response.json();
-
+  if (!response.ok) {
+    throw new Error("Error add link")
+  }
   if (result[0] === null) {
     console.log('no result returned');
 

@@ -45,7 +45,7 @@
 				</Button>
 			</div>
 			<div>
-				<Tabs.List>
+				<Tabs.List class="bg-bg-alternative">
 					<Tabs.Trigger
 						class={buttonVariants({
 							variant: 'ghost',

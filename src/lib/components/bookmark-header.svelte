@@ -31,7 +31,7 @@
 				try {
 					let folder_id: string | null = null;
 					if (folerID_Name) {
-						folder_id = folerID_Name.folder_name;
+						folder_id = folerID_Name.folder_id;
 					}
 					const link = await addLink(form.data.url, folder_id);
 					toast.success(`Added ${form.data.url}`);
