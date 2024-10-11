@@ -22,6 +22,7 @@
 	import { Heart, Bell } from 'lucide-svelte';
 	import CardHeader from '$lib/components/ui/card/card-header.svelte';
 
+	import * as Tabs from '$lib/components/ui/tabs';
 	let note = '';
 	let collection = 'hello1';
 	let tags: string[] = [];
@@ -38,6 +39,14 @@
 	}
 </script>
 
+<Tabs.Root value="account" class="w-[400px]">
+	<Tabs.List>
+		<Tabs.Trigger value="account">Account</Tabs.Trigger>
+		<Tabs.Trigger value="password">Password</Tabs.Trigger>
+	</Tabs.List>
+	<Tabs.Content value="account">Make changes to your account here.</Tabs.Content>
+	<Tabs.Content value="password">Change your password here.</Tabs.Content>
+</Tabs.Root>
 <Card.Root class="w-[350px]">
 	<Card.Content class="w-full">
 		<Card.Header>

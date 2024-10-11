@@ -9,7 +9,7 @@ export let errorInvalidUrl = '';
 
 const myLinks: Link[] = [];
 
-export async function addLink(url: string, folderID: string): Promise<Link | undefined> {
+export async function addLink(url: string, folderID: string | null): Promise<Link | undefined> {
   const s = getSession();
   if (!s) return;
 
@@ -27,7 +27,7 @@ export async function addLink(url: string, folderID: string): Promise<Link | und
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     body: JSON.stringify({
       url: url,
-      folder_id: folderID
+      folder_id: folderID || null
     }) // body data type must match "Content-Type" header
   });
 

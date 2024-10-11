@@ -22,18 +22,18 @@
 	import { linksFound } from '$lib/stores/link.store';
 	import { cn, getCookie } from '$lib/utils';
 	import { page } from '$app/stores';
-	const folerID_Name = get(currentFolderAtSlug);
+	$: folerID_Name = $currentFolderAtSlug;
 	$: form = superForm(defaults(zod(urlSchema)), {
 		SPA: true,
 		validators: zod(urlSchema),
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
 				try {
-					if (!folerID_Name) {
-						toast.warning('Foldernam is empty');
-						return;
+					let folder_id: string | null = null;
+					if (folerID_Name) {
+						folder_id = folerID_Name.folder_name;
 					}
-					const link = await addLink(form.data.url, folerID_Name.folder_id);
+					const link = await addLink(form.data.url, folder_id);
 					toast.success(`Added ${form.data.url}`);
 					if (!link) return;
 					await goto(`/app/${$currentFolderAtSlug?.folder_id}/item/${link.link_id}/edit`);
@@ -179,7 +179,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 				<Form.Button aria-disabled={$submitting}>
-					Add to {$currentFolderAtSlug?.folder_name}
+					Add to {$currentFolderAtSlug?.folder_name ?? 'Unsorted'}
 					{#if $submitting}
 						<span class="ml-2 h-6">
 							<LoadingSpinner />

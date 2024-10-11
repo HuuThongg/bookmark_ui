@@ -76,6 +76,7 @@
 				<img src={link.link_thumbnail} alt="" class="h-12 w-14 rounded" draggable="false" />
 				<div>
 					<h3 class="font-medium text-color">{link.link_title}</h3>
+					<div><span class="text-sm text-secondary-text">{link.description ?? ''}</span></div>
 					<p class="text-sm text-secondary-text">
 						{link.link_hostname} ·
 						{dayjs(link.added_at).format('MMM D')}

@@ -14,7 +14,7 @@
 <div
 	class={cn(
 		'min-h-screen w-full max-w-[420px] bg-bg p-2 text-color',
-		notfullWidth ? 'max-w-[420px]' : 'max-w-full'
+		notfullWidth ? 'min-w-[420px] max-w-[420px]' : 'max-w-full'
 	)}
 >
 	<div class=" mx-auto max-w-6xl overflow-y-auto">

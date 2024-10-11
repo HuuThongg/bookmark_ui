@@ -5,6 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Card from '$lib/components/ui/card/index.js';
 
+	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Heart, Bell, ChevronsDownUp, Check, Plus } from 'lucide-svelte';
 	import { onMount, tick } from 'svelte';
@@ -20,6 +21,7 @@
 	import { moveLinksToTrash } from '$lib/api/link/moveLinksToTrash';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { changeLinkDesc } from '$lib/api/link/changeLinkDesc';
 	export let tagsList;
 	let isDialogOpen = false;
 	$: link = $editedLink;
@@ -30,6 +32,9 @@
 
 	$: oldURL = $editedLink.link_url ?? 'https://example.com';
 	$: URL = oldURL;
+
+	$: oldDesc = $editedLink.description ?? '';
+	$: desc = oldDesc;
 
 	const frameworks = [
 		{
@@ -108,23 +113,48 @@
 		await moveLinksToTrash([link.link_id]);
 		await goto(backToCollectionURL);
 	}
+
+	async function handleUpdateDescription() {
+		if (link && link.link_id) {
+			desc = desc.trim();
+			if (desc === oldDesc)  return;
+			await changeLinkDesc(link.link_id, desc);
+		}
+	}
 </script>
 
 <Card.Root class="w-full border-0 bg-transparent">
 	<Card.Content class="w-full">
 		<div class="flex">
-			<div class="w-full max-w-20">
-				<img class="h-auto w-full" src={link.link_thumbnail} alt={`Image of ${link.link_title}`} />
+			<div class="max-h-24 max-w-24">
+				<Avatar.Root class="h-auto w-auto rounded-md">
+					<Avatar.Image
+						src={link.link_thumbnail}
+						alt={link.link_hostname}
+						class="aspect-auto h-auto w-full"
+					/>
+					<Avatar.Fallback></Avatar.Fallback>
+				</Avatar.Root>
 			</div>
-			<div class="grid flex-1 gap-2">
+			<div class="grid flex-1">
 				<Label for="title" class="sr-only">Title</Label>
-
 				<textarea
 					id="title"
 					bind:value={title}
 					on:blur={handleUpdateTitle}
 					placeholder="https://example.com"
-					class="border-0 bg-transparent pl-4 text-base font-medium text-color focus-visible:outline-0"
+					class="border-0 bg-transparent pl-4 text-base font-medium text-color before:absolute
+
+before:bottom-0 before:left-0 before:right-0 before:contents before:h-1 before:bg-accent-color focus-visible:outline-0
+          "
+				/>
+
+				<textarea
+					id="description"
+					bind:value={desc}
+					on:blur={handleUpdateDescription}
+					placeholder="https://example.com"
+					class="line-clamp-2 w-full border-0 bg-transparent pl-4 text-base font-medium text-primary-text focus-visible:outline-0"
 				/>
 			</div>
 		</div>
