@@ -5,8 +5,8 @@ import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async () => {
 
-  await authenticate({ admin: true });
-  await goto(AppRoute.APP_ALL)
+  //await authenticate({ admin: true });
+  //await goto(AppRoute.APP_ALL)
   return {
     title: 'Bookmark'
   }
