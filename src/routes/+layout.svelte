@@ -7,7 +7,7 @@
 		title: 'Bookmarking.app - ALl-in-one boomark manager',
 		description: 'All in One Bookmark Manager. For your inspiration, read later, media and stuff..',
 		themeColor: 'currentColor',
-		imageUrl: 'src/lib/images/bookmarking1.webp', // Replace this with your actual image URL
+		imageUrl: 'og1.webp', // Replace this with your actual image URL
 		ogType: 'website',
 		twitterCard: 'summary_large_image',
 		externalDomain: 'https://example.com', // Set your external domain here,
