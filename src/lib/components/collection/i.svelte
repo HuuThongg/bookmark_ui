@@ -91,7 +91,7 @@
 			toIndex = slicedArr.length;
 		}
 
-		slicedArr.splice(toIndex + 1, 0, element);
+		slicedArr.splice(toIndex, 0, element);
 
 		//console.log('Updated order:');
 		//for (let i = 0; i < slicedArr.length; i++) {

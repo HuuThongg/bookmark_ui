@@ -2,6 +2,7 @@
 	import dayjs from 'dayjs';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
+	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import {
 		CirclePlus,
 		Clipboard,
@@ -73,7 +74,15 @@
 			)}
 		>
 			<div class="flex items-center space-x-3">
-				<img src={link.link_thumbnail} alt="" class="h-12 w-14 rounded" draggable="false" />
+				<Avatar.Root class="h-auto w-16 rounded-sm">
+					<Avatar.Image
+						src={link.link_thumbnail}
+						alt=""
+						class="h-full w-full rounded-sm"
+						draggable="false"
+					/>
+					<Avatar.Fallback class="h-16 rounded-sm"></Avatar.Fallback>
+				</Avatar.Root>
 				<div>
 					<h3 class="font-medium text-color">{link.link_title}</h3>
 					<div><span class="text-sm text-secondary-text">{link.description ?? ''}</span></div>
@@ -132,7 +141,7 @@
 		<Separator class="my-1" />
 	</ContextMenu.Trigger>
 	{#if currentOpenMenu === link.link_id}
-		<ContextMenu.Content class="flex flex-col">
+		<ContextMenu.Content class="flex flex-col bg-bg">
 			<ContextMenu.Item
 				on:click={() => window.open(`${link.link_url}`, '_blank')}
 				class={cn('cursor-pointer', buttonClass)}

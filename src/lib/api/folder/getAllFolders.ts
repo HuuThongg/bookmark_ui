@@ -6,27 +6,28 @@ import type { Fetch } from '$lib/types';
 import type { Folder } from '$lib/types/folder';
 
 export async function getAllFolders(fetch: Fetch): Promise<Folder[] | undefined> {
-	const s = getSession();
-	if (!s || (s && !s.access_token)) {
-		await goto(AppRoute.ACCOUNT_LOGIN);
-		return;
-	}
+  const s = getSession();
+  if (!s || (s && !s.access_token)) {
+    await goto(AppRoute.ACCOUNT_LOGIN);
+    return;
+  }
 
-	const getFoldersEndPoint = `${PUBLIC_API_ENDPOINT}/private/folder/all`;
+  const getFoldersEndPoint = `${PUBLIC_API_ENDPOINT}/private/folder/all`;
 
-	const response = await fetch(getFoldersEndPoint, {
-		method: 'GET',
-		mode: 'cors',
-		credentials: 'include',
-		headers: {
-			'Content-Type': 'application/json',
-			authorization: `Bearer ${s.access_token}`
-		}
-	});
+  const response = await fetch(getFoldersEndPoint, {
+    method: 'GET',
+    mode: 'cors',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${s.access_token}`
+    }
+  });
 
-	const result = await response.json();
+  const result = await response.json();
 
-	const folders: Folder[] = result[0];
+  const folders: Folder[] = result[0];
+  console.log("folders", folders)
 
-	return folders;
+  return folders;
 }

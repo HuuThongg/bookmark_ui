@@ -1,3 +1,6 @@
 export const initInput = (element: HTMLInputElement) => {
-	element.focus();
+  console.log("initInput", element)
+  setTimeout(() => {
+    element.focus();
+  }, 1);
 };

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
-	import { Input } from '$lib/components/ui/input';
+	import { clickOutside } from '$lib/actions/click-outside';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { cn } from '$lib/utils';
@@ -8,11 +8,12 @@
 	import { folderSchema } from '$lib/schemas';
 	import LoadingSpinner from '../shared-components/loading-spinner.svelte';
 	import { CreateFolder } from '$lib/api/folder/createFolder';
-	import { inputClass } from '$lib/utils';
 	import { initInput } from '$lib/actions/focus';
 	import { sidebarSelectedFolderId } from '$lib/stores/folder.store';
 	import { isOpenCreatedFolderComponent } from '$lib/stores';
 	import { Plus } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+
 	$: form = superForm(defaults(zod(folderSchema)), {
 		SPA: true,
 		validators: zod(folderSchema),
@@ -29,7 +30,12 @@
 		onUpdated: () => {}
 	});
 	$: ({ form: formData, submitting, enhance } = form);
-	$: console.log('sidebarSelectedFolderId', $sidebarSelectedFolderId);
+	onMount(() => {
+		console.log('on mount');
+	});
+	function handleCancelEditFolderName() {
+		isOpenCreatedFolderComponent.set(false);
+	}
 </script>
 
 <form method="post" use:enhance class="flex w-full">
@@ -48,6 +54,10 @@
 					bind:value={$formData.folderName}
 					placeholder=""
 					use:initInput
+					use:clickOutside={{
+						onEscape: handleCancelEditFolderName,
+						onOutclick: handleCancelEditFolderName
+					}}
 				/>
 				{#if $submitting}
 					<span class="absolute right-2 top-[8px] h-6 w-6">

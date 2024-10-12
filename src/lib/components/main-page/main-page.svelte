@@ -5,6 +5,7 @@
 	import { cn } from '$lib/utils';
 	import FilterHeader from './filter-header.svelte';
 	import LinkList from './link/link-list.svelte';
+	import Button from '../ui/button/button.svelte';
 	$: linkList = $links;
 
 	const notfullWidth = $page.url.pathname.includes('/item');
@@ -23,7 +24,10 @@
 		<LinkList {linkList} />
 		{#if linkList.length === 0}
 			<div class=" mt-10 flex w-full justify-center">
-				<h3 class="text-xl">Add a link</h3>
+				<h3 class="text-lg">No Link Found</h3>
+			</div>
+			<div class="flex w-full justify-center">
+				<Button href="/app/all" variant="link" size="lg" class="text-lg">All bookmarks</Button>
 			</div>
 		{/if}
 	</div>
