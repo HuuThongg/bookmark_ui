@@ -161,14 +161,11 @@
 	</ContextMenu.Trigger>
 	{#if currentOpenMenu === link.link_id}
 		<ContextMenu.Content class="flex flex-col bg-bg">
-			<ContextMenu.Item
-				on:click={() => window.open(`${link.link_url}`, '_blank')}
-				class={cn('cursor-pointer', buttonClass)}
-			>
-				<div class="flex items-center">
+			<ContextMenu.Item class={cn(buttonClass, 'cursor-pointer p-0 ')}>
+				<a rel="noopener noreferrer" href={link.link_url} class="flex items-center px-3">
 					<ExternalLink class="text-foreground-alt mr-2 size-5" />
 					Open in a new tab
-				</div>
+				</a>
 			</ContextMenu.Item>
 			<ContextMenu.Item
 				on:click={async () => await copyToClipboard(link.link_url)}
