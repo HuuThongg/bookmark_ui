@@ -8,7 +8,7 @@
 		description: 'All in One Bookmark Manager. For your inspiration, read later, media and stuff..',
 		themeColor: 'currentColor',
 		imageUrl: 'og1.webp', // Replace this with your actual image URL
-		ogType: 'app',
+		ogType: 'website',
 		twitterCard: 'summary_large_image',
 		externalDomain: 'https://example.com', // Set your external domain here,
 		domain: 'https://bookmarking.app'
@@ -32,7 +32,6 @@
 		{/if}
 
 		<!-- Twitter Meta Tags -->
-		<meta name="twitter:card" content="app" />
 		<meta name="twitter:site" content="@bookmarking_app" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={metaInfo.title} />
