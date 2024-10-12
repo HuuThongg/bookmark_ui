@@ -1,8 +1,10 @@
 <script lang="ts">
-	import hero from '$lib/images/hero.png';
+	import hero from '$lib/images/bookmarking1.webp';
 	import FeatureCard from '$lib/components/landingPage/featureCard.svelte';
 	import { Layers, ArrowRight, LayersIcon, SearchIcon, MaximizeIcon } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+
+	import bookmarking2 from '$lib/images/bookmarking2.webp';
 </script>
 
 <div class="flex flex-col">
@@ -29,11 +31,19 @@
 							Sign Up
 							<ArrowRight class="ml-2 h-4 w-4" />
 						</Button>
-						<button
-							class="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-						>
-							Learn More
-						</button>
+						<Button size="lg" variant="outline" href="/galery">
+							Learn more
+							<ArrowRight class="ml-2 h-4 w-4" />
+						</Button>
+					</div>
+					<div class="mt-8">
+						<img
+							src={bookmarking2}
+							width="1200"
+							height="600"
+							alt="BookmarkPro App Interface"
+							class="rounded-lg shadow-2xl"
+						/>
 					</div>
 				</div>
 				<div class="relative">

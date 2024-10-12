@@ -3,6 +3,8 @@ export const ssr = false;
 export const csr = true;
 export const load: LayoutLoad = async (event) => {
   return {
-    title: 'title'
+    meta: {
+      title: 'Bookmarking',
+    },
   };
 };
