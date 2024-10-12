@@ -33,7 +33,7 @@
 
 		<!-- Twitter Meta Tags -->
 		<meta name="twitter:site" content="@bookmarking_app" />
-		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:card" content="card" />
 		<meta name="twitter:title" content={metaInfo.title} />
 		<meta name="twitter:description" content={metaInfo.description} />
 		{#if metaInfo.imageUrl}
