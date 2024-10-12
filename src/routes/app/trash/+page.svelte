@@ -4,7 +4,7 @@
 	$: linkList = $trashLinks;
 </script>
 
-<div class="w-full p-4">
+<div class="h-full w-full overflow-y-auto p-4">
 	{#if linkList?.length > 0}
 		<LinkList {linkList} />
 	{/if}

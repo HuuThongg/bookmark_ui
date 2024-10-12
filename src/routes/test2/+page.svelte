@@ -4,42 +4,54 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import {
-		Dialog,
-		DialogContent,
-		DialogDescription,
-		DialogHeader,
-		DialogTitle,
-		DialogTrigger
-	} from '$lib/components/ui/dialog';
-	//import {
-	//	Combobox,
-	//	ComboboxContent,
-	//	ComboboxInput,
-	//	ComboboxItem,
-	//	ComboboxTrigger
-	//} from '$lib/components/ui/combobox';
+
+	import * as Resizable from '$lib/components/ui/resizable/index.js';
+
 	import { Heart, Bell } from 'lucide-svelte';
-	import CardHeader from '$lib/components/ui/card/card-header.svelte';
 
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { getCookie } from '$lib/utils';
 	let note = '';
 	let collection = 'hello1';
 	let tags: string[] = [];
 	let url = 'https://purecode.ai';
-	let isDialogOpen = false;
-
-	const collections = ['hello1', 'hello2', 'hello3'];
-	const tagOptions = ['AI', 'UI', 'Design', 'Code'];
 
 	function handleSave() {
-		// Implement save logic here
 		console.log('Saving note:', { note, collection, tags, url });
-		isDialogOpen = false;
+		//isDialogOpen = false;
+	}
+
+	let defaultLayout = [65];
+
+	let defaultCollapsed = false;
+	let isCollapsed = defaultCollapsed;
+	let navCollapsedSize: number = 100;
+
+	function onlayoutchange(sizes: number[]) {
+		//document.cookie = `paneforge:layout1=${JSON.stringify(sizes)}; path=/app`;
+	}
+	function setCollapsedCookie(value: boolean) {
+		//document.cookie = `PaneForge:collapsed1=${value}; path=/app;`;
+		//window.dispatchEvent(new Event('collapsedCookieChanged'));
+	}
+	window.addEventListener('collapsedCookieChanged', () => {
+		//const newCollapsedCookie = getCookie('PaneForge:collapsed1');
+		//if (newCollapsedCookie) {
+		//isCollapsed = JSON.parse(newCollapsedCookie);
+		//}
+	});
+	function onCollapse() {
+		//isCollapsed = true;
+		//setCollapsedCookie(isCollapsed);
+	}
+
+	function onExpand() {
+		//isCollapsed = false;
+		//setCollapsedCookie(isCollapsed);
 	}
 </script>
 
-<Tabs.Root value="account" class="w-[400px]">
+<Tabs.Root value="account" class="w-[1000px]">
 	<Tabs.List>
 		<Tabs.Trigger value="account">Account</Tabs.Trigger>
 		<Tabs.Trigger value="password">Password</Tabs.Trigger>
@@ -80,3 +92,40 @@
 		</div>
 	</Card.Content>
 </Card.Root>
+
+<Resizable.PaneGroup direction="horizontal" {onlayoutchange} class="w-full rounded-lg border">
+	<Resizable.Pane
+		defaultSize={defaultLayout[0]}
+		collapsedSize={navCollapsedSize}
+		collapsible
+		minSize={12}
+		maxSize={40}
+		{onCollapse}
+		{onExpand}
+		class="md:max-w-[400px]"
+		style="width: {isCollapsed ? '0' : ''}; flex-grow: {isCollapsed && 0}; min-width: {isCollapsed
+			? 'auto'
+			: '200px'};"
+	>
+		<div class="flex h-[200px] items-center justify-center p-6">
+			<span class="font-semibold">One</span>
+		</div>
+	</Resizable.Pane>
+	<Resizable.Handle withHandle />
+	<Resizable.Pane defaultSize={50}>
+		<Resizable.PaneGroup direction="vertical">
+			<Resizable.Pane defaultSize={25}>
+				<div class="flex h-full items-center justify-center p-6">
+					<span class="font-semibold">Two</span>
+				</div>
+			</Resizable.Pane>
+			<Resizable.Handle withHandle />
+			<Resizable.Pane defaultSize={75}>
+				<div class="flex h-full items-center justify-center p-6">
+					<span class="font-semibold">Three</span>
+				</div>
+			</Resizable.Pane>
+		</Resizable.PaneGroup>
+	</Resizable.Pane>
+</Resizable.PaneGroup>
+Copy

@@ -5,7 +5,7 @@
 	$: linkList = $query === '' ? $allLinks : $linksFound;
 </script>
 
-<div class="w-full p-4">
+<div class="h-full w-full overflow-y-auto p-4">
 	{#if $query !== '' && $linksFound.length === 0}
 		<span class="pl-3 text-lg">Not found</span>
 	{:else}
