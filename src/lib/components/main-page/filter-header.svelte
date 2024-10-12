@@ -27,12 +27,13 @@
 		}
 	}
 	function toggleSelectedLinksMode() {
-		selectedLinksMode.update((v) => !v);
-		if ($selectedLinkIdsToEdit.length > 0) {
-			selectedLinkIdsToEdit.set([]);
-		} else {
+		if (!$selectedLinksMode) {
 			selectedLinkIdsToEdit.set(linkIds);
+		} else {
+			selectedLinkIdsToEdit.set([]);
 		}
+
+		selectedLinksMode.update((v) => !v);
 	}
 	$: isIconNameHidden = $page.url.pathname.includes('/item');
 	beforeNavigate(() => {

@@ -8,12 +8,12 @@
 		Clipboard,
 		ExternalLink,
 		Eye,
+		FolderOpenDot,
 		Grab,
 		Pencil,
 		Trash,
 		Trash2
 	} from 'lucide-svelte';
-	import { deleteLinksForever } from '$lib/api/link/deleteLinksForever';
 	import { loadingStatesStore, type LoadingStates } from '$lib/stores';
 	import LoadingSpinner from '$lib/components/shared-components/loading-spinner.svelte';
 	import { checkboxLinkStore, selectedLinkIdsToEdit } from '$lib/stores/link.store';
@@ -62,6 +62,7 @@
 	$: currPathname = $page.url.pathname.split('/').at(2) ?? '';
 
 	$: folderIDslug = currPathname === 'all' ? link.folder_id : currPathname;
+	$: isCurrentActive = $page.url.pathname.includes(`/item/${link.link_id}`);
 </script>
 
 <ContextMenu.Root>
@@ -69,8 +70,11 @@
 		<a
 			href={`/app/${folderIDslug}/item/${link.link_id}/edit`}
 			class={cn(
-				'group/item relative flex select-none items-center justify-between rounded-lg bg-transparent p-3 hover:bg-hover-bg ',
-				{ 'bg-accent-color/30': isEdited }
+				'group/item relative flex select-none items-center justify-between rounded-lg bg-transparent p-3 transition-colors hover:bg-hover-bg active:bg-accent-color',
+				{
+					'bg-accent-color/30': isEdited,
+					'bg-hover-bg': !isEdited && isCurrentActive
+				}
 			)}
 		>
 			<div class="flex items-center space-x-3">
@@ -85,11 +89,26 @@
 				</Avatar.Root>
 				<div>
 					<h3 class="font-medium text-color">{link.link_title}</h3>
-					<div><span class="text-sm text-secondary-text">{link.description ?? ''}</span></div>
-					<p class="text-sm text-secondary-text">
-						{link.link_hostname} ·
-						{dayjs(link.added_at).format('MMM D')}
-					</p>
+					<div>
+						<span class="line-clamp-5 text-sm text-primary-text">{link.description ?? ''}</span>
+					</div>
+					<span class="text-secondary-text">{link.link_notes}</span>
+
+					{#if link?.tags && link.tags.length > 0}
+						<div>
+							{#each link.tags as tag}
+								<span class="ml-1 text-accent-color/90 hover:underline">#{tag.tag_name}</span>
+							{/each}
+						</div>
+					{/if}
+					<div class="flex items-center space-x-2 text-sm leading-4">
+						<FolderOpenDot class="size-3 text-secondary-text" />
+						<span class="text-secondary-text hover:underline">{link.folder_name}</span>
+						<p class="text-sm text-secondary-text hover:underline">
+							{link.link_hostname} ·
+							{dayjs(link.added_at).format('MMM D')}
+						</p>
+					</div>
 				</div>
 			</div>
 			{#if checked}

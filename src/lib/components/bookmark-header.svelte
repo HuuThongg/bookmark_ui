@@ -97,6 +97,7 @@
 		document.cookie = `PaneForge:collapsed=false; path=/app;`;
 		window.dispatchEvent(new Event('collapsedCookieChanged'));
 	}
+	$: console.log('currentFolderAtSlug', $currentFolderAtSlug);
 </script>
 
 <div class="m-1 mx-2 flex items-center">

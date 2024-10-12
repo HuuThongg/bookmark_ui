@@ -25,6 +25,7 @@ export async function getFolderLinks(fetch: Fetch, folderID: string | undefined)
   }
 
   const result = await res.json();
+  console.log("getFolderLinks", result)
 
   let linksList: Link[] = [];
   if (result[0]) {

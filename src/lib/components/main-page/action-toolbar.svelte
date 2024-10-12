@@ -27,10 +27,13 @@
 		StarOff
 	} from 'lucide-svelte';
 	import { page } from '$app/stores';
+	import TagInput from '../edit.web-page/tag-input.svelte';
 	let moveDialogOpen = false;
 	let addTagsDialogOpen = false;
 	let deleteDialogOpen = false;
 
+	import { type Tag } from '@melt-ui/svelte';
+	import BulkTag from './bulk-tag.svelte';
 	$: isIconNameHidden = $page.url.pathname.includes('/item');
 	function handleOpen() {
 		// Implement open functionality
@@ -54,6 +57,7 @@
 	function toggleSelectedLinksMode() {
 		selectedLinksMode.update((v) => !v);
 	}
+	const tagsList: Tag[] = [];
 </script>
 
 {#if $selectedLinksMode}
@@ -80,11 +84,8 @@
 					<span class={isIconNameHidden ? 'hidden' : 'block'}>Add tags</span>
 				</Button>
 			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Add Tags</DialogTitle>
-				</DialogHeader>
-				<!-- Add your add tags dialog content here -->
+			<DialogContent class="bg-sidebar-bg">
+				<BulkTag />
 			</DialogContent>
 		</Dialog>
 		<Dialog bind:open={deleteDialogOpen}>
