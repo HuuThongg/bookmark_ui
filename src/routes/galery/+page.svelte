@@ -9,7 +9,7 @@
 		class="container mx-auto mt-0 grid grid-cols-1 grid-rows-[auto] gap-y-10 px-5 lg:grid-cols-[475px_1fr] lg:grid-rows-[auto] lg:gap-x-20 lg:gap-y-0"
 	>
 		<div class="relative">
-			<img
+			<enhanced:img
 				src={hero}
 				width="1200"
 				height="600"
@@ -18,7 +18,7 @@
 			/>
 		</div>
 		<div class="relative">
-			<img
+			<enhanced:img
 				src={bookmarking1}
 				width="1200"
 				height="600"
