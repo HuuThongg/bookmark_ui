@@ -57,7 +57,8 @@
 	];
 
 	function toggleCreateFolderUI() {
-		isOpenCreatedFolderComponent.set(!$isOpenCreatedFolderComponent);
+		//if($isOpenCreatedFolderComponent)
+		isOpenCreatedFolderComponent.update((v) => !v);
 	}
 </script>
 
@@ -109,7 +110,7 @@
 					</Button>
 				</div>
 				<div class="flex h-full flex-col space-y-2 overflow-y-auto">
-					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === null}
+					{#if $isOpenCreatedFolderComponent && $sidebarSelectedFolderId === 'all'}
 						<CreateFolderUI />
 					{/if}
 					<AllCollection />

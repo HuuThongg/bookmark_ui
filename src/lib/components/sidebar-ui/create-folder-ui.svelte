@@ -30,9 +30,6 @@
 		onUpdated: () => {}
 	});
 	$: ({ form: formData, submitting, enhance } = form);
-	onMount(() => {
-		console.log('on mount');
-	});
 	function handleCancelEditFolderName() {
 		isOpenCreatedFolderComponent.set(false);
 	}
