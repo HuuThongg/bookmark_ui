@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import Bookmark from '$lib/components/v0/bookmark.svelte';
 </script>
 
+<a href="/test2">test2</a>
 <div
 	class="relative flex max-h-screen min-h-screen flex-col bg-bg"
 	id="page"

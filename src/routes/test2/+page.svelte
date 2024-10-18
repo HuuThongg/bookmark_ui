@@ -11,6 +11,7 @@
 
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { getCookie } from '$lib/utils';
+	import AccountWrapper from '$lib/components/account/account-wrapper.svelte';
 	let note = '';
 	let collection = 'hello1';
 	let tags: string[] = [];
@@ -51,6 +52,7 @@
 	}
 </script>
 
+<a href="/test">Ttest</a>
 <Tabs.Root value="account" class="w-[1000px]">
 	<Tabs.List>
 		<Tabs.Trigger value="account">Account</Tabs.Trigger>

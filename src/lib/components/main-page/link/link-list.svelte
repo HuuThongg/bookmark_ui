@@ -18,7 +18,7 @@
 	});
 </script>
 
-<div class="h-full w-full space-y-4 overflow-y-auto" data-sveltekit-preload-data="tap">
+<div class="h-full w-full space-y-4 overflow-y-auto" data-sveltekit-preload-data="off">
 	{#each linkList as link}
 		<LinkItem {link} {currentOpenMenu} on:openContextMenu={handleOpenContextMenu} />
 	{/each}

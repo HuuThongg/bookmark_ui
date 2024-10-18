@@ -23,3 +23,8 @@ export const metaInfo = {
   twitterCard: "summary_large_image",
   externalDomain: "https://example.com", // Set your external domain here
 };
+
+export const enum ViewMode {
+  EDIT = 'edit',
+  WEB = 'web'
+}

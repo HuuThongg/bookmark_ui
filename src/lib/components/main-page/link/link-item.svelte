@@ -14,7 +14,7 @@
 		Trash,
 		Trash2
 	} from 'lucide-svelte';
-	import { loadingStatesStore, type LoadingStates } from '$lib/stores';
+	import { loadingStatesStore, viewModeStore, type LoadingStates } from '$lib/stores';
 	import LoadingSpinner from '$lib/components/shared-components/loading-spinner.svelte';
 	import { checkboxLinkStore, selectedLinkIdsToEdit } from '$lib/stores/link.store';
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
@@ -28,7 +28,7 @@
 	export let link: Link;
 	export let currentOpenMenu: string | null;
 	let loadingStates: LoadingStates = {};
-
+	$: viewMode = $viewModeStore;
 	$: checked = $checkboxLinkStore[link.link_id] ?? false;
 
 	$: linkIdsSelected = $selectedLinkIdsToEdit;
@@ -46,6 +46,7 @@
 	}
 
 	function handleToggleSelectedLink() {
+		console.log('h');
 		selectedLinkIdsToEdit.update((v) => {
 			if (!checked) {
 				return [...v, link.link_id];
@@ -68,7 +69,7 @@
 <ContextMenu.Root>
 	<ContextMenu.Trigger on:contextmenu={openMenu}>
 		<a
-			href={`/app/${folderIDslug}/item/${link.link_id}/edit`}
+			href={`/app/${folderIDslug}/item/${link.link_id}/${viewMode}`}
 			class={cn(
 				'group/item relative flex select-none items-center justify-between rounded-lg bg-transparent p-3 transition-colors hover:bg-hover-bg active:bg-accent-color',
 				{
@@ -80,7 +81,7 @@
 			<div class="flex items-center space-x-3">
 				<Avatar.Root class="h-auto w-16 rounded-sm">
 					<Avatar.Image
-						src={link.link_thumbnail}
+						src={link.link_thumbnail ?? link.link_favicon}
 						alt=""
 						class="h-full w-full rounded-sm"
 						draggable="false"
@@ -145,7 +146,11 @@
 						variant="ghost"
 						size="sm"
 						class="border bg-accent-foreground hover:border-accent-color  hover:bg-accent-foreground focus-visible:bg-accent-foreground"
-						on:click={async () => await moveLinksToTrash([link.link_id])}
+						on:click={async (e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							await moveLinksToTrash([link.link_id]);
+						}}
 						aria-disabled={loadingStates[link.link_id]}
 					>
 						{#if loadingStates[link.link_id]}
@@ -194,7 +199,11 @@
 
 			<ContextMenu.Separator />
 			<ContextMenu.Item
-				on:click={async () => await goto(`/app/${folderIDslug}/item/${link.link_id}/edit`)}
+				on:click={async (e) => {
+					//e.preventDefault();
+					//e.stopPropagation();
+					await goto(`/app/${folderIDslug}/item/${link.link_id}/edit`);
+				}}
 				class={cn('cursor-pointer', buttonClass)}
 			>
 				<div class="flex items-center">
@@ -204,7 +213,11 @@
 			</ContextMenu.Item>
 
 			<ContextMenu.Item
-				on:click={async () => await moveLinksToTrash([link.link_id])}
+				on:click={async (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					await moveLinksToTrash([link.link_id]);
+				}}
 				class={cn('cursor-pointer', buttonClass)}
 			>
 				<div class="flex items-center">

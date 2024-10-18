@@ -7,8 +7,8 @@
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import * as Dialog from '$lib/components/ui/dialog';
-
 	import { urlSchema } from '$lib/schemas';
+	import { initInput } from '$lib/actions/focus';
 	import { searchInputFocused } from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 	import LoadingSpinner from './shared-components/loading-spinner.svelte';
@@ -22,6 +22,8 @@
 	import { linksFound } from '$lib/stores/link.store';
 	import { cn, getCookie } from '$lib/utils';
 	import { page } from '$app/stores';
+	import { AppRoute } from '$lib/constants';
+	let popoverOpen = false;
 	$: folerID_Name = $currentFolderAtSlug;
 	$: form = superForm(defaults(zod(urlSchema)), {
 		SPA: true,
@@ -35,7 +37,9 @@
 					}
 					const link = await addLink(form.data.url, folder_id);
 					toast.success(`Added ${form.data.url}`);
+
 					if (!link) return;
+					popoverOpen = false;
 					await goto(`/app/${$currentFolderAtSlug?.folder_id}/item/${link.link_id}/edit`);
 				} catch (error) {
 					toast.error('Error: adding a link');
@@ -47,7 +51,6 @@
 	$: ({ form: formData, submitting, enhance } = form);
 
 	async function handleSearchFormSubmit() {
-		console.log('helllllo');
 		await handleSearchInput();
 	}
 	async function handleSearchInput() {
@@ -57,6 +60,10 @@
 			linksFound.set([]);
 
 			return;
+		} else {
+			if (!$page.url.pathname.includes(AppRoute.APP_ALL)) {
+				await goto(AppRoute.APP_ALL);
+			}
 		}
 
 		await searchLinksAndFolders($query);
@@ -111,8 +118,8 @@
 	<div class="relative flex-grow">
 		<form on:submit|preventDefault|stopPropagation={handleSearchFormSubmit}>
 			<Search class="absolute left-2 top-1/2 -translate-y-1/2 transform text-primary-text" />
-			<Input
-				class=" pl-10 "
+			<input
+				class=" flex h-10 w-full rounded-md border border-input bg-bg-alternative px-3 py-2 pl-10 text-sm text-color ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary-text focus-visible:bg-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 				type="search"
 				name="search"
 				id="search"
@@ -122,6 +129,7 @@
 				on:keydown={handleSearchInputKeyDown}
 				on:focus={handleSearchFocus}
 				on:input={debounce(handleSearchInput, 400)}
+				use:initInput
 			/>
 		</form>
 
@@ -149,7 +157,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 
-	<Popover.Root>
+	<Popover.Root bind:open={popoverOpen}>
 		<Popover.Trigger asChild let:builder>
 			<Button builders={[builder]} variant="default" class="ml-2 text-base font-semibold">
 				<Plus class="size-5" />

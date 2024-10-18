@@ -18,7 +18,7 @@
 		notfullWidth ? 'min-w-[420px] max-w-[420px]' : 'max-w-full'
 	)}
 >
-	<div class=" mx-auto h-full max-w-6xl overflow-hidden">
+	<div class=" mx-auto h-full max-w-7xl overflow-hidden">
 		<BookmarkHeader />
 		<FilterHeader />
 		<LinkList {linkList} />

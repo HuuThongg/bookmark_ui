@@ -92,13 +92,14 @@ export async function checkIfIsAuthenticated(access_token: string): Promise<bool
 export const handleLogout = async (redirectUri: string) => {
   try {
     if (redirectUri.startsWith('/')) {
-      goto(redirectUri);
+      goto(redirectUri, { replaceState: true });
     } else {
       window.location.href = redirectUri;
+      window.history.replaceState(null, '', redirectUri);
+      window.location.reload();
     }
   } finally {
     resetSavedUser();
-    //document.cookie = '';
   }
 };
 

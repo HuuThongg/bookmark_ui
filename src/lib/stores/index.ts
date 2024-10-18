@@ -1,5 +1,4 @@
-import { getCookie } from '$lib/utils';
-
+import { ViewMode } from '$lib/constants';
 import { type Tag } from '@melt-ui/svelte';
 import { writable, derived } from 'svelte/store';
 export const searching = writable<boolean>(false);
@@ -18,3 +17,6 @@ export const query = writable<string>('');
 export const searchInputFocused = writable<boolean>(false);
 
 export const tagsForEachLinkStore = writable<Tag[]>([]);
+
+
+export const viewModeStore = writable<ViewMode>(ViewMode.EDIT);
